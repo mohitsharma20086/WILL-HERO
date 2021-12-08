@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -113,18 +114,76 @@
             <Image url="@../../../will_hero_logo.png" />
          </image>
       </ImageView>
-      <Group>
+      <Group layoutX="23.0" layoutY="119.0">
          <children>
-            <AnchorPane prefHeight="417.0" prefWidth="410.0">
+            <AnchorPane prefHeight="287.0" prefWidth="386.0">
                <children>
-                  <ImageView fitHeight="420.0" fitWidth="415.0">
+                  <ImageView fitHeight="292.0" fitWidth="386.0">
                      <image>
                         <Image url="@../../../popup_backg.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="65.0" layoutY="67.0" text="Add New User" textAlignment="CENTER" textFill="WHITE">
+                  <TextField layoutX="195.0" layoutY="182.0" />
+                  <ImageView fitHeight="73.0" fitWidth="165.0" layoutX="20.0" layoutY="218.0">
+                     <image>
+                        <Image url="@../../../continue-button.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="53.0" layoutY="70.0" text="Add New User" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="Bell MT Bold" size="44.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="48.0" layoutY="180.0" text="ENTER NAME" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita Bold" size="20.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="54.0" fitWidth="133.0" layoutX="211.0" layoutY="229.0">
+                     <image>
+                        <Image url="@../../../back_button.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="345.0">
+                     <image>
+                        <Image url="@../../../quit_logo.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </Group>
+      <Group layoutX="990.0" layoutY="333.0">
+         <children>
+            <AnchorPane layoutX="-555.0" layoutY="-131.0" prefHeight="241.0" prefWidth="335.0">
+               <children>
+                  <ImageView fitHeight="245.0" fitWidth="335.0" layoutY="1.0">
+                     <image>
+                        <Image url="@../../../popup_backg.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="104.0" layoutY="79.0" text="Save Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Aparajita Bold" size="31.0" />
+                     </font></Label>
+                  <ImageView fitHeight="65.0" fitWidth="158.0" layoutY="181.0">
+                     <image>
+                        <Image url="@../../../continue-button.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="42.0" fitWidth="122.0" layoutX="196.0" layoutY="193.0">
+                     <image>
+                        <Image url="@../../../back_button.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="36.0" fitWidth="35.0" layoutX="300.0" layoutY="1.0">
+                     <image>
+                        <Image url="@../../../quit_logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="101.0" layoutY="124.0" text="Load Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Aparajita Bold" size="31.0" />
                      </font>
                   </Label>
                </children>

@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -25,7 +26,10 @@ public class GameController {
     private Parent root;
 
     @FXML
-    private Button start_button;
+    private AnchorPane greeting_page;
+
+    @FXML
+    private ImageView play_button;
 
     @FXML
     private ImageView Cursor_icon;
@@ -44,10 +48,10 @@ public class GameController {
 
     @FXML
     private ImageView will_hero_name;
-
-    public void gotogame(ActionEvent e) throws IOException {
+    @FXML
+    void gotogame(MouseEvent event)  throws IOException {
         root = FXMLLoader.load(getClass().getResource("game.fxml"));
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root, Color.rgb(29,200,255,1));
         scene.setFill(Color.rgb(29,200,255,1));
         stage.setScene(scene);
