@@ -11,7 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.util.EventObject;
 public class GameController {
 
     private static User currentUser;
+    private boolean ocscreen = false;       //to check if any other pop-up is on
 
     @FXML
     private Stage stage;
@@ -40,6 +43,9 @@ public class GameController {
     private ImageView save_load;
 
     @FXML
+    private ImageView saveloadgame_exit;
+
+    @FXML
     private Group saveloadgame_popup;
 
     @FXML
@@ -53,8 +59,6 @@ public class GameController {
 
     @FXML
     private ImageView will_hero_name;
-
-
     @FXML
     void gotogame(MouseEvent event)  throws IOException {
         root = FXMLLoader.load(getClass().getResource("game.fxml"));
@@ -67,12 +71,43 @@ public class GameController {
 
     @FXML
     void show_exit_popup(MouseEvent event) {
-//        saveloadgame_popup.
+        if(!ocscreen){
+            if(saveloadgame_popup.getOpacity() == 0)
+                saveloadgame_popup.setOpacity(1);
+            ocscreen = true;
+        }
+        else {
+            if (saveloadgame_popup.getOpacity() == 1)
+                saveloadgame_popup.setOpacity(0);
+            ocscreen = false;
+        }
+    }
+
+
+    @FXML
+    void hide_exit_popup(MouseEvent event) {
+
     }
 
     @FXML
     void show_saveload_popup(MouseEvent event) {
-
+        if(!ocscreen){
+            if(saveloadgame_popup.getOpacity() == 0)
+                saveloadgame_popup.setOpacity(1);
+            ocscreen = true;
+        }
+        else {
+            if (saveloadgame_popup.getOpacity() == 1)
+                saveloadgame_popup.setOpacity(0);
+            ocscreen = false;
+        }
     }
 
+    @FXML
+    void hide_saveload_popup(MouseEvent event) {
+        if(saveloadgame_popup.getOpacity() == 1) {
+            saveloadgame_popup.setOpacity(0);
+            ocscreen = false;
+        }
+    }
 }
