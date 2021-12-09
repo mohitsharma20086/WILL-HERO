@@ -3,6 +3,7 @@ package com.example.willhero;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,20 +26,24 @@ public class GameController {
     private Scene scene;
     private Parent root;
 
-    @FXML
-    private AnchorPane greeting_page;
-
-    @FXML
-    private ImageView play_button;
 
     @FXML
     private ImageView Cursor_icon;
+
+    @FXML
+    private Group add_new_user_popup;
 
     @FXML
     private ImageView quit_game;
 
     @FXML
     private ImageView save_load;
+
+    @FXML
+    private Group saveloadgame_popup;
+
+    @FXML
+    private ImageView setting_logo;
 
     @FXML
     private ImageView tap_icon;
@@ -48,6 +53,8 @@ public class GameController {
 
     @FXML
     private ImageView will_hero_name;
+
+
     @FXML
     void gotogame(MouseEvent event)  throws IOException {
         root = FXMLLoader.load(getClass().getResource("game.fxml"));
@@ -56,6 +63,16 @@ public class GameController {
         scene.setFill(Color.rgb(29,200,255,1));
         stage.setScene(scene);
         stage.show();
+    }
+
+    @FXML
+    void show_exit_popup(MouseEvent event) {
+//        saveloadgame_popup.
+    }
+
+    @FXML
+    void show_saveload_popup(MouseEvent event) {
+
     }
 
 }
