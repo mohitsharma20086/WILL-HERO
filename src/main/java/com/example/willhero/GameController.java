@@ -108,7 +108,6 @@ public class GameController implements Initializable{
     private ImageView hero;
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
-        TimeUnit.MILLISECONDS.sleep(5000);
         Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
         Stage stage = (Stage)(greeting_stage).getScene().getWindow();
         Scene scene = new Scene(root, Color.rgb(29,200,255,1));
@@ -150,27 +149,6 @@ public class GameController implements Initializable{
         stage.show();
     }
 
-//    void show_exit_popup1(MouseEvent event) {
-//        if(!onscreen){
-//            if(saveloadgame_popup.getOpacity() == 0)
-//                saveloadgame_popup.setOpacity(1);
-//            onscreen = true;
-//        }
-//        else {
-//            if (saveloadgame_popup.getOpacity() == 1)
-//                saveloadgame_popup.setOpacity(0);
-//            onscreen = false;
-//        }
-//    }
-//
-//
-//    void hide_exit_popup1(MouseEvent event) {
-//        if(exitgame_popup.getOpacity() == 1) {
-//            exitgame_popup.setOpacity(0);
-//            onscreen = false;
-//        }
-//
-//    }
 
     @FXML
     void show_settingpopup(MouseEvent event) {
@@ -333,26 +311,29 @@ public class GameController implements Initializable{
 
     @FXML
     void startgame(KeyEvent event) {
-        if(event.getCode() == KeyCode.SPACE && onhomescreen){
-            translateTransition(will_hero_name, 400, rootmain.getPrefWidth(), 0, false, 1).play();
-            translateTransition(Cursor_icon, 400, rootmain.getPrefWidth(), 0, false, 1).play();
-            translateTransition(setting_logo, 200, -100, 0, false, 1).play();
-            translateTransition(addnew_user, 200, -100, 0, false, 1).play();
-            translateTransition(save_load, 200, -100, 0, false, 1).play();
-            translateTransition(quit_game, 200, -100, 0, false, 1).play();
-            translateTransition(view_highscore, 200, -100, 0, false, 1).play();
-            FadeTransition tapf = new FadeTransition(Duration.millis(300), tap_icon);
-            tapf.setFromValue(1.0);
-            tapf.setToValue(0.0);
-            tapf.play();
-            onhomescreen = false;
-            File im = new File("src/main/resources/pause_logo.png");
-            pause_gamebutton.setImage(new Image(im.toURI().toString()));
+        if(onscreen == false){
+            if(event.getCode() == KeyCode.SPACE && onhomescreen){
+                translateTransition(will_hero_name, 400, rootmain.getPrefWidth(), 0, false, 1).play();
+                translateTransition(Cursor_icon, 400, rootmain.getPrefWidth(), 0, false, 1).play();
+                translateTransition(setting_logo, 200, -100, 0, false, 1).play();
+                translateTransition(addnew_user, 200, -100, 0, false, 1).play();
+                translateTransition(save_load, 200, -100, 0, false, 1).play();
+                translateTransition(quit_game, 200, -100, 0, false, 1).play();
+                translateTransition(view_highscore, 200, -100, 0, false, 1).play();
+                FadeTransition tapf = new FadeTransition(Duration.millis(300), tap_icon);
+                tapf.setFromValue(1.0);
+                tapf.setToValue(0.0);
+                tapf.play();
+                onhomescreen = false;
+                File im = new File("src/main/resources/pause_logo.png");
+                pause_gamebutton.setImage(new Image(im.toURI().toString()));
+            }
         }
+
 //       else if(event.getCode() == KeyCode.SPACE && !onhomescreen){
 //            translateTransition(hero, 100, 50, 0, false, 1).play();
 //        }
-        else if(String.valueOf(event.getCode()) == "q" || String.valueOf(event.getCode()) == "Q"){
+        if(String.valueOf(event.getCode()) == "q" || String.valueOf(event.getCode()) == "Q"){
             if(!onscreen) {
                 TranslateTransition translate = new TranslateTransition(Duration.millis(400), exitgame_popup);
                 translate.setToX((rootmain.getPrefWidth()+((Node)exitgame_popup).getBoundsInLocal().getWidth())/2);
