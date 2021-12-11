@@ -324,6 +324,11 @@
                         <Font name="Aparajita Bold" size="29.0" />
                      </font>
                   </Label>
+                  <Label layoutX="100.0" layoutY="127.0" onMouseClicked="#pause_exit_popup" text="Quit Game" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita Bold" size="29.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

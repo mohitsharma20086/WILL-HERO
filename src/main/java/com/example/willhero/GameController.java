@@ -317,6 +317,19 @@ public class GameController implements Initializable{
         translate.play();
         onscreen = false;
     }
+    @FXML
+    void pause_exit_popup(MouseEvent event) {
+        TranslateTransition translate = new TranslateTransition(Duration.millis(300), pause_game_popup);
+        translate.setToY(0);
+        translate.play();
+        onscreen = false;
+        if(!onscreen) {
+            TranslateTransition translate1 = new TranslateTransition(Duration.millis(400), exitgame_popup);
+            translate1.setToX((rootmain.getPrefWidth()+((Node)exitgame_popup).getBoundsInLocal().getWidth())/2);
+            translate1.play();
+            onscreen = true;
+        }
+    }
 
     @FXML
     void startgame(KeyEvent event) {
