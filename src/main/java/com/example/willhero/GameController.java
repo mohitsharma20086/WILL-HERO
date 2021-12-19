@@ -1,8 +1,6 @@
 package com.example.willhero;
 //image.setImage(null);
 import javafx.animation.*;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,27 +8,24 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.EventObject;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameController implements Initializable{
+public class GameController implements Initializable {
 
 //    private ImageView clouds[];
     @FXML
@@ -104,8 +99,98 @@ public class GameController implements Initializable{
 
 
 
+
     @FXML
     private ImageView hero;
+    @FXML
+    private ImageView cloud1;
+    @FXML
+    private ImageView cloud2;
+    @FXML
+    private ImageView cloud3;
+    @FXML
+    private ImageView cloud4;
+    @FXML
+    private ImageView cloud5;
+    @FXML
+    private ImageView cloud6;
+     @FXML
+    private ImageView cloud7;
+     @FXML
+    private ImageView cloud8;
+    @FXML
+    private ImageView cloud9;
+    @FXML
+    private ImageView cloud10;
+    @FXML
+    private ImageView cloud11;
+    @FXML
+    private ImageView cloud12;
+    @FXML
+    private ImageView cloud13;
+    private ArrayList<ImageView> clouds = new ArrayList<ImageView>();
+    private ArrayList<TranslateTransition> cloudstransitions = new ArrayList<TranslateTransition>();
+
+    private TranslateTransition herojump;
+    private TranslateTransition translate1;
+    private SequentialTransition s;
+    private boolean flag = false;
+    private boolean flagcloud = false;
+
+
+    public TranslateTransition translateTransitionmoveto(Node n, double time, double distanceXs ,double distanceXe, boolean repeat, int cycle){
+        TranslateTransition translate = new TranslateTransition(Duration.millis(time),n);
+        if(cycle == -1){
+            translate.setCycleCount(TranslateTransition.INDEFINITE);
+        }
+        else{
+            translate.setCycleCount(cycle);
+        }
+        translate.setToX(distanceXe);
+        translate.setFromX(distanceXs);
+        translate.setAutoReverse(repeat);
+        return translate;
+    }
+
+
+    public void moveclouds(){
+        clouds.add(cloud1);     clouds.add(cloud2);
+        clouds.add(cloud3);     clouds.add(cloud4);
+        clouds.add(cloud5);
+        clouds.add(cloud6);     clouds.add(cloud7);
+        clouds.add(cloud8);     clouds.add(cloud9);
+        clouds.add(cloud10);     clouds.add(cloud11);
+        clouds.add(cloud12);     clouds.add(cloud13);
+
+        if(flagcloud == false) {
+            flagcloud = true;
+            for (int i = 0; i < 5; i++) {
+                cloudstransitions.add(translateTransition(clouds.get(i), 15000, -1050, 0, false, 1));
+                cloudstransitions.get(i).play();
+            }
+        }
+        AtomicInteger count = new AtomicInteger(5);
+        Timeline t = new Timeline(new KeyFrame(Duration.seconds(2),e->{
+            int k = (int)(Math.random()*300);
+            int k1 = (int)(Math.random()*90);
+            int k2 = (int)(Math.random()*2);
+
+            // random number should be in a limit
+            //going too up or down
+            if(k2 == 1){
+                clouds.get(count.get()).setY(k1);
+            }
+            else{
+                clouds.get(count.get()).setY(-1*k1);
+            }
+            translateTransitionmoveto(clouds.get(count.get()), 15000, k, -1500, false, 1).play();
+            count.getAndIncrement();
+            if(count.get() > 12)count.set(5);
+        }));
+        t.setCycleCount(Animation.INDEFINITE);
+        t.play();
+    }
+
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
         Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
@@ -131,11 +216,21 @@ public class GameController implements Initializable{
     }
 
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        translateTransition(hero, 300,0,-50, true, -1).play();
+        translate1 = new TranslateTransition(Duration.millis(300),hero);
+        translate1.setCycleCount(Animation.INDEFINITE);
+        translate1.setToY(-50);
+        translate1.setAutoReverse(true);
+        herojump = translateTransition(hero, 300,0,-50, true, -1);
+        herojump.play();
         translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
+        if(cloud2 != null){
+            moveclouds();
+        }
+
 }
 
     @FXML
@@ -320,6 +415,7 @@ public class GameController implements Initializable{
                 translateTransition(save_load, 200, -100, 0, false, 1).play();
                 translateTransition(quit_game, 200, -100, 0, false, 1).play();
                 translateTransition(view_highscore, 200, -100, 0, false, 1).play();
+//                moveclouds();
                 FadeTransition tapf = new FadeTransition(Duration.millis(300), tap_icon);
                 tapf.setFromValue(1.0);
                 tapf.setToValue(0.0);
@@ -329,10 +425,25 @@ public class GameController implements Initializable{
                 pause_gamebutton.setImage(new Image(im.toURI().toString()));
             }
         }
+       if(event.getCode() == KeyCode.SPACE && !onhomescreen){
+           herojump.stop();
+           TranslateTransition movefor = translateTransition(hero, 100, 50, 0, false, 1);
+           TranslateTransition translate = new TranslateTransition(Duration.millis(300),hero);
+           translate.setCycleCount(1);
+           translate.setToY(0);
+           translate.setAutoReverse(false);
 
-//       else if(event.getCode() == KeyCode.SPACE && !onhomescreen){
-//            translateTransition(hero, 100, 50, 0, false, 1).play();
-//        }
+           if(flag == false){
+               flag = true;
+               s = new SequentialTransition(movefor,translate,translate1);
+               s.play();
+           }
+           else{
+               s.stop();
+               s = new SequentialTransition(movefor,translate,translate1);
+               s.play();
+           }
+        }
         if(String.valueOf(event.getCode()) == "q" || String.valueOf(event.getCode()) == "Q"){
             if(!onscreen) {
                 TranslateTransition translate = new TranslateTransition(Duration.millis(400), exitgame_popup);

@@ -22,44 +22,83 @@
             <Image url="@../../../Backgr.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="89.0" fitWidth="200.0" layoutX="209.0" layoutY="-45.0">
-         <image>
-            <Image url="@../../../cloud1.png" />
-         </image>
-      </ImageView>
+      <Group>
+         <children>
+            <ImageView fx:id="cloud1" fitHeight="89.0" fitWidth="200.0" layoutX="230.0" layoutY="-44.0">
+               <image>
+                  <Image url="@../../../cloud1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud2" fitHeight="90.0" fitWidth="200.0" layoutX="581.0" layoutY="231.0">
+               <image>
+                  <Image url="@../../../cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud3" fitHeight="90.0" fitWidth="200.0" layoutX="719.0" layoutY="76.0">
+               <image>
+                  <Image url="@../../../cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud4" fitHeight="89.0" fitWidth="200.0" layoutX="-105.0" layoutY="231.0">
+               <image>
+                  <Image url="@../../../cloud1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud5" fitHeight="94.0" fitWidth="218.0" layoutX="140.0" layoutY="138.0">
+               <image>
+                  <Image url="@../../../cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud8" fitHeight="90.0" fitWidth="200.0" layoutX="1130.0" layoutY="159.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud7" fitHeight="90.0" fitWidth="200.0" layoutX="1030.0" layoutY="231.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud6" fitHeight="90.0" fitWidth="200.0" layoutX="1046.0" layoutY="-36.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud9" fitHeight="89.0" fitWidth="200.0" layoutX="1046.0" layoutY="62.0">
+               <image>
+                  <Image url="@../../../cloud1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud13" fitHeight="90.0" fitWidth="200.0" layoutX="1246.0" layoutY="-14.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud12" fitHeight="90.0" fitWidth="200.0" layoutX="1046.0" layoutY="276.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud11" fitHeight="89.0" fitWidth="200.0" layoutX="1197.0" layoutY="218.0">
+               <image>
+                  <Image url="@../../../cloud1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="cloud10" fitHeight="90.0" fitWidth="200.0" layoutX="1197.0" layoutY="31.0">
+               <image>
+                  <Image url="@../../../Cloud.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Group>
       <ImageView fitHeight="192.0" fitWidth="251.0" layoutX="629.0" layoutY="364.0">
          <image>
             <Image url="@../../../platform5.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="89.0" fitWidth="200.0" layoutX="72.0" layoutY="206.0">
-         <image>
-            <Image url="@../../../cloud1.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="90.0" fitWidth="200.0" layoutX="780.0" layoutY="31.0">
-         <image>
-            <Image url="@../../../cloud.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="90.0" fitWidth="200.0" layoutX="-28.0" layoutY="87.0">
-         <image>
-            <Image url="@../../../cloud.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="90.0" fitWidth="200.0" layoutX="580.0" layoutY="195.0">
-         <image>
-            <Image url="@../../../cloud.png" />
-         </image>
-      </ImageView>
       <ImageView fx:id="Cursor_icon" fitHeight="30.0" fitWidth="34.0" layoutX="484.0" layoutY="305.0">
          <image>
             <Image url="@../../../Cursor.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="hero" fitHeight="54.0" fitWidth="50.0" layoutX="296.0" layoutY="393.0">
-         <image>
-            <Image url="@../../../knight.png" />
          </image>
       </ImageView>
       <ImageView fitHeight="231.0" fitWidth="427.0" layoutX="176.0" layoutY="342.0">
@@ -80,11 +119,6 @@
       <ImageView fitHeight="178.0" fitWidth="165.0" layoutX="190.0" layoutY="32.0">
          <image>
             <Image url="@../../../platform4.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="90.0" fitWidth="200.0" layoutX="731.0" layoutY="74.0">
-         <image>
-            <Image url="@../../../cloud.png" />
          </image>
       </ImageView>
       <ImageView fx:id="view_highscore" fitHeight="44.0" fitWidth="50.0" layoutX="20.0" layoutY="478.0" onMouseClicked="#show_highscore_popup">
@@ -125,6 +159,11 @@
       <ImageView fx:id="will_hero_name" fitHeight="153.0" fitWidth="200.0" layoutX="413.0" layoutY="87.0">
          <image>
             <Image url="@../../../will_hero_logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="hero" fitHeight="54.0" fitWidth="50.0" layoutX="296.0" layoutY="393.0">
+         <image>
+            <Image url="@../../../knight.png" />
          </image>
       </ImageView>
       <Group fx:id="add_new_user_popup" layoutX="-410.0" layoutY="182.0">

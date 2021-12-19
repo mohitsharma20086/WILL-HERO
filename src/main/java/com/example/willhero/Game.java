@@ -59,6 +59,7 @@ public class Game extends Application implements Serializable{
             }
         }));
         display.play();
+
     }
 
 //    @Override
