@@ -1,5 +1,4 @@
 package com.example.willhero;
-//image.setImage(null);
 import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameController implements Initializable {
 
-//    private ImageView clouds[];
     @FXML
     private Parent root;
     @FXML
@@ -95,41 +93,28 @@ public class GameController implements Initializable {
     @FXML
     private ImageView hide_pause_game_popup;
 
-
-
-
-
-
     @FXML
     private ImageView hero;
+
+    private ArrayList<Cloud> clouds = new ArrayList<Cloud>();
+//    private ArrayList<Platform> platform = new ArrayList<Platform>();
+    private ArrayList<ImageView> platform = new ArrayList<ImageView>();
+
+
+
     @FXML
-    private ImageView cloud1;
+    private ImageView platform1;
     @FXML
-    private ImageView cloud2;
+    private ImageView platform2;
     @FXML
-    private ImageView cloud3;
+    private ImageView platform3;
     @FXML
-    private ImageView cloud4;
+    private ImageView platform4;
     @FXML
-    private ImageView cloud5;
+    private ImageView platform5;
+
     @FXML
-    private ImageView cloud6;
-     @FXML
-    private ImageView cloud7;
-     @FXML
-    private ImageView cloud8;
-    @FXML
-    private ImageView cloud9;
-    @FXML
-    private ImageView cloud10;
-    @FXML
-    private ImageView cloud11;
-    @FXML
-    private ImageView cloud12;
-    @FXML
-    private ImageView cloud13;
-    private ArrayList<ImageView> clouds = new ArrayList<ImageView>();
-    private ArrayList<TranslateTransition> cloudstransitions = new ArrayList<TranslateTransition>();
+    private ImageView orc1;
 
     private TranslateTransition herojump;
     private TranslateTransition translate1;
@@ -152,50 +137,10 @@ public class GameController implements Initializable {
         return translate;
     }
 
-
-    public void moveclouds(){
-        clouds.add(cloud1);     clouds.add(cloud2);
-        clouds.add(cloud3);     clouds.add(cloud4);
-        clouds.add(cloud5);
-        clouds.add(cloud6);     clouds.add(cloud7);
-        clouds.add(cloud8);     clouds.add(cloud9);
-        clouds.add(cloud10);     clouds.add(cloud11);
-        clouds.add(cloud12);     clouds.add(cloud13);
-
-        if(flagcloud == false) {
-            flagcloud = true;
-            for (int i = 0; i < 5; i++) {
-                cloudstransitions.add(translateTransition(clouds.get(i), 15000, -1050, 0, false, 1));
-                cloudstransitions.get(i).play();
-            }
-        }
-        AtomicInteger count = new AtomicInteger(5);
-        Timeline t = new Timeline(new KeyFrame(Duration.seconds(2),e->{
-            int k = (int)(Math.random()*300);
-            int k1 = (int)(Math.random()*90);
-            int k2 = (int)(Math.random()*2);
-
-            // random number should be in a limit
-            //going too up or down
-            if(k2 == 1){
-                clouds.get(count.get()).setY(k1);
-            }
-            else{
-                clouds.get(count.get()).setY(-1*k1);
-            }
-            translateTransitionmoveto(clouds.get(count.get()), 15000, k, -1500, false, 1).play();
-            count.getAndIncrement();
-            if(count.get() > 12)count.set(5);
-        }));
-        t.setCycleCount(Animation.INDEFINITE);
-        t.play();
-    }
-
-
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
-        Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
-        Stage stage = (Stage)(greeting_stage).getScene().getWindow();
-        Scene scene = new Scene(root, Color.rgb(29,200,255,1));
+        root = FXMLLoader.load(getClass().getResource("game.fxml"));
+        stage = (Stage)(greeting_stage).getScene().getWindow();
+        scene = new Scene(root, Color.rgb(29,200,255,1));
         scene.setFill(Color.rgb(29,200,255,1));
         stage.setScene(scene);
         stage.show();
@@ -217,32 +162,77 @@ public class GameController implements Initializable {
 
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        translate1 = new TranslateTransition(Duration.millis(300),hero);
-        translate1.setCycleCount(Animation.INDEFINITE);
-        translate1.setToY(-50);
-        translate1.setAutoReverse(true);
-        herojump = translateTransition(hero, 300,0,-50, true, -1);
-        herojump.play();
-        translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
-        translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
-        if(cloud2 != null){
-            moveclouds();
+    public void moveclouds(){
+        for(int i = 0; i< 13; i++){
+            Cloud c = new Cloud();
+            clouds.add(c);
         }
 
-}
+        int arry[] = {10,110,65,-20,75};
+        int arrx[] = {-10,300,350,200,400};
 
-    @FXML
-    void gotogame(MouseEvent event)  throws IOException {
-        root = FXMLLoader.load(getClass().getResource("game.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root, Color.rgb(29,200,255,1));
-        scene.setFill(Color.rgb(29,200,255,1));
-
-        stage.setScene(scene);
-        stage.show();
+        int arrt[] = {30000, 30000, 30000, 30000, 40000};
+        for(int i = 0; i< 5; i++){
+            clouds.get(i).setcloudx(arrx[i]);
+            clouds.get(i).setcloudy(arry[i]);
+            clouds.get(i).setOnscreen(true);
+            rootmain.getChildren().add(clouds.get(i).getCloud());
+            clouds.get(i).move(rootmain, arrx[i], -1500, arrt[i]);
+        }
+        clouds.get(6).moveetoe(rootmain);
+        clouds.get(5).moveetoe(rootmain);
+        AtomicInteger count = new AtomicInteger(7);
+        Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
+            clouds.get(count.get()).moveetoe(rootmain);
+            count.getAndIncrement();
+            if(count.get() > 12)count.set(0);
+        }));
+        t.setCycleCount(Animation.INDEFINITE);
+        t.play();
     }
+
+
+    public void addplatforms(){
+
+        for(int i = 0; i< 13; i++){
+            Cloud c = new Cloud();
+            clouds.add(c);
+        }
+        AtomicInteger count = new AtomicInteger(0);
+        Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
+            clouds.get(count.get()).moveetoe(rootmain);
+            count.getAndIncrement();
+            if(count.get() > 12)count.set(5);
+        }));
+        t.setCycleCount(Animation.INDEFINITE);
+        t.play();
+    }
+
+    AnimationTimer coll  = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            if ((hero).getBoundsInParent().intersects(orc1.getBoundsInParent())) {
+                System.out.println("collision");
+            }
+        }
+    };
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("IN game");
+        translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
+        translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
+        translate1 = Animations.translateTransitionmovetoY(hero,300, 0 , -55, true, -1);
+        herojump = translateTransition(hero, 300,0,-55, true, -1);
+        herojump.play();
+        if(hero != null){
+            moveclouds();
+            coll.start();
+            platform.add(platform1);        platform.add(platform2);
+            platform.add(platform3);        platform.add(platform4);
+            platform.add(platform5);        //platform.add(platform1);
+        }
+}
 
 
     @FXML
@@ -250,7 +240,6 @@ public class GameController implements Initializable {
         if(!onscreen){
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), setting_popup);
             translate.setToY((rootmain.getPrefHeight()+((Node)setting_popup).getBoundsInLocal().getWidth())/2);
-//            translate.setToY(setting_popup.getLayoutX() + rootmain.getPrefHeight()/2);
             translate.play();
             onscreen = true;
         }
@@ -285,7 +274,6 @@ public class GameController implements Initializable {
         if(!onscreen) {
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), saveloadgame_popup);
             translate.setToX((rootmain.getPrefWidth()+((Node)saveloadgame_popup).getBoundsInLocal().getWidth())/2);
-//            translate.setToX(saveloadgame_popup.getLayoutX() + (rootmain.getPrefWidth()) / 2);
             translate.play();
             onscreen = true;
         }
@@ -303,7 +291,6 @@ public class GameController implements Initializable {
         if(!onscreen){
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), viewhighscore_popup);
             translate.setToX((rootmain.getPrefWidth()+((Node)viewhighscore_popup).getBoundsInLocal().getWidth())/2);
-//            translate.setToX(viewhighscore_popup.getLayoutX() + rootmain.getPrefWidth()/2);
             translate.play();
             onscreen = true;
         }
@@ -322,7 +309,6 @@ public class GameController implements Initializable {
         if(!onscreen) {
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), exitgame_popup);
             translate.setToX((rootmain.getPrefWidth()+((Node)exitgame_popup).getBoundsInLocal().getWidth())/2);
-//            translate.setToX(exitgame_popup.getLayoutX() + (rootmain.getPrefWidth()) / 2);
             translate.play();
             onscreen = true;
         }
@@ -406,8 +392,9 @@ public class GameController implements Initializable {
 
     @FXML
     void startgame(KeyEvent event) {
-        if(onscreen == false){
+        if(!onscreen){
             if(event.getCode() == KeyCode.SPACE && onhomescreen){
+                //Move All the Icons out of the screen
                 translateTransition(will_hero_name, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 translateTransition(Cursor_icon, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 translateTransition(setting_logo, 200, -100, 0, false, 1).play();
@@ -415,7 +402,6 @@ public class GameController implements Initializable {
                 translateTransition(save_load, 200, -100, 0, false, 1).play();
                 translateTransition(quit_game, 200, -100, 0, false, 1).play();
                 translateTransition(view_highscore, 200, -100, 0, false, 1).play();
-//                moveclouds();
                 FadeTransition tapf = new FadeTransition(Duration.millis(300), tap_icon);
                 tapf.setFromValue(1.0);
                 tapf.setToValue(0.0);
@@ -433,17 +419,66 @@ public class GameController implements Initializable {
            translate.setToY(0);
            translate.setAutoReverse(false);
 
-           if(flag == false){
-               flag = true;
-               s = new SequentialTransition(movefor,translate,translate1);
-               s.play();
-           }
-           else{
-               s.stop();
-               s = new SequentialTransition(movefor,translate,translate1);
-               s.play();
-           }
-        }
+           Thread thread1 = new Thread(){
+               @Override
+               public void run(){
+                   if(flag) translate1.stop();
+                   else flag = true;
+                   movefor.play();
+                   try {
+                       Thread.sleep(100);
+                   } catch (InterruptedException e) {
+                       e.printStackTrace();
+                   }
+                   translate.play();
+                   translate.setOnFinished(e -> {
+                       translate1.play();
+                   });
+
+
+               }
+           };
+
+           System.out.println(orc1);
+           Thread collisionThread = new Thread(){
+               @Override
+               public void run(){
+                       checkCollision(hero,orc1);
+               }
+           };
+           collisionThread.start();
+
+           Thread thread2 = new Thread(){
+               @Override
+               public void run(){
+                   while(true){
+                       System.out.println(" "+ (hero).getBoundsInParent().intersects(orc1.getBoundsInParent()));
+                       if (hero.getBoundsInParent().intersects(orc1.getBoundsInParent())) {
+                           System.out.println("collision");
+                       }
+                       try {
+                           Thread.sleep(500);
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                       }
+                   }
+               }
+           };
+
+           Thread thread3 = new Thread(){
+               @Override
+               public void run(){
+                   int count = 5;
+                   for(int i = 0; i< 5; i++){
+                       translateTransition(platform.get(i), 300, -150, 0, false, 1).play();
+                   }
+               }
+           };
+           thread1.start();
+//           thread3.start();
+//           thread2.start();
+
+       }
         if(String.valueOf(event.getCode()) == "q" || String.valueOf(event.getCode()) == "Q"){
             if(!onscreen) {
                 TranslateTransition translate = new TranslateTransition(Duration.millis(400), exitgame_popup);
@@ -454,5 +489,86 @@ public class GameController implements Initializable {
         }
     }
 
+    public void checkCollision(ImageView imageView, ImageView imageView2){
+        if(imageView.getBoundsInParent().intersects(imageView2.getBoundsInParent())){
+            System.out.println("Boom");
+        }
+    }
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//    public void moveclouds(){
+//        clouds.add(cloud1);     clouds.add(cloud2);
+//        clouds.add(cloud3);     clouds.add(cloud4);
+//        clouds.add(cloud5);
+//        clouds.add(cloud6);     clouds.add(cloud7);
+//        clouds.add(cloud8);     clouds.add(cloud9);
+//        clouds.add(cloud10);     clouds.add(cloud11);
+//        clouds.add(cloud12);     clouds.add(cloud13);
+//
+//        if(flagcloud == false) {
+//            flagcloud = true;
+//            for (int i = 0; i < 5; i++) {
+//                cloudstransitions.add(translateTransition(clouds.get(i), 15000, -1050, 0, false, 1));
+//                cloudstransitions.get(i).play();
+//            }
+//        }
+//        AtomicInteger count = new AtomicInteger(5);
+//        Timeline t = new Timeline(new KeyFrame(Duration.seconds(2),e->{
+//            int k = (int)(Math.random()*300);
+//            int k1 = (int)(Math.random()*90);
+//            int k2 = (int)(Math.random()*2);
+//
+//            // random number should be in a limit
+//            //going too up or down
+//            if(k2 == 1){
+//                clouds.get(count.get()).setY(k1);
+//            }
+//            else{
+//                clouds.get(count.get()).setY(-1*k1);
+//            }
+//            translateTransitionmoveto(clouds.get(count.get()), 15000, k, -1500, false, 1).play();
+//            count.getAndIncrement();
+//            if(count.get() > 12)count.set(5);
+//        }));
+//        t.setCycleCount(Animation.INDEFINITE);
+//        t.play();
+//    }
