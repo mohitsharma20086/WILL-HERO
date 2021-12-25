@@ -21,8 +21,8 @@ public class Cloud{
         else{
             cloud.setImage(new Image((new File("src/main/resources/cloud1.png")).toURI().toString()));
         }
-        cloud.setX(0);
-        cloud.setY(50);
+        cloud.setX(Math.random()*600);
+        cloud.setY(Math.random()*400);
         cloud.setFitHeight(70);
         cloud.setFitWidth(170);
     }

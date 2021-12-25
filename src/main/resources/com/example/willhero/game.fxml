@@ -37,40 +37,6 @@
             <Image url="@../../../highscore.png" />
          </image>
       </ImageView>
-      <Group layoutX="69.0" layoutY="415.0">
-         <children>
-            <ImageView fx:id="platform3" fitHeight="108.0" fitWidth="103.0" layoutX="862.0" layoutY="23.0">
-               <image>
-                  <Image url="@../../../platform6.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="platform1" fitHeight="138.0" fitWidth="423.0" layoutX="150.0" layoutY="23.0">
-               <image>
-                  <Image url="@../../../platforml.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="platform2" fitHeight="151.0" fitWidth="243.0" layoutX="568.0" layoutY="22.0">
-               <image>
-                  <Image url="@../../../platform7.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="platform5" fitHeight="178.0" fitWidth="165.0" layoutX="142.0" layoutY="-399.0">
-               <image>
-                  <Image url="@../../../platform4.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="platform4" fitHeight="222.0" fitWidth="115.0" layoutX="339.0" layoutY="-498.0">
-               <image>
-                  <Image url="@../../../platform3.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="orc1" layoutX="579.0" layoutY="-109.0">
-               <image>
-                  <Image url="@../../../Orc1.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Group>
       <ImageView fx:id="save_load" fitHeight="54.0" fitWidth="56.0" layoutX="16.0" layoutY="413.0" onMouseClicked="#show_saveload_popup">
          <image>
             <Image url="@../../../save_logo.png" />
@@ -99,11 +65,6 @@
       <ImageView fx:id="will_hero_name" fitHeight="153.0" fitWidth="200.0" layoutX="413.0" layoutY="87.0">
          <image>
             <Image url="@../../../will_hero_logo.png" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="hero" fitHeight="54.0" fitWidth="50.0" layoutX="296.0" layoutY="393.0">
-         <image>
-            <Image url="@../../../knight.png" />
          </image>
       </ImageView>
       <Group fx:id="add_new_user_popup" layoutX="-410.0" layoutY="182.0">
@@ -288,11 +249,6 @@
          <children>
             <AnchorPane prefHeight="382.0" prefWidth="312.0">
                <children>
-                  <ImageView fitHeight="392.0" fitWidth="312.0">
-                     <image>
-                        <Image url="@../../../backgpop.png" />
-                     </image>
-                  </ImageView>
                   <ImageView fx:id="hide_pause_game_popup" fitHeight="43.0" fitWidth="44.0" layoutX="283.0" layoutY="-20.0" onMouseClicked="#hide_pause_gamepopup">
                      <image>
                         <Image url="@../../../quit_logo.png" />
@@ -312,5 +268,6 @@
             </AnchorPane>
          </children>
       </Group>
+      <Group layoutX="56.0" layoutY="413.0" />
    </children>
 </AnchorPane>
