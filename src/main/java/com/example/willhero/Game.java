@@ -45,7 +45,7 @@ public class Game extends Application implements Serializable{
         stage.setScene(scene);
         stage.show();
 
-        Timeline display = new Timeline( new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+        Timeline display = new Timeline( new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {

@@ -94,6 +94,9 @@ public class GameController implements Initializable {
     @FXML
     private ImageView hide_pause_game_popup;
 
+    @FXML
+    private Group game_over_popup;
+
 
     private boolean falg_col = false;
 
@@ -101,6 +104,8 @@ public class GameController implements Initializable {
     private ArrayList<Platform> platform = new ArrayList<Platform>();
     private ArrayList<Orc> orcs = new ArrayList<Orc>();
 //    private ArrayList<ImageView> platform = new ArrayList<ImageView>();
+
+    private ArrayList<TranslateTransition> moveplatforms = new ArrayList<TranslateTransition>();
 
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
@@ -146,16 +151,33 @@ public class GameController implements Initializable {
         t.play();
     }
 
+    public void removeplatforms(){
+        Platform.setplatform_id(0);Platform.setplatform_id(0);
+        for(int i = 12; i >= 0; i--){
+            platform.get(i).remove(rootmain);
+            platform.remove(i);
+        }
+    }
+
     public void generateplatforms(){
         int c = 100;
         int r = 0;
-        for(int i = 0; i< 13; i++){
+
+        Platform p1 = new Platform(rootmain, 0);
+        platform.add(p1);
+        platform.get(0).setPlatformx(c+r);
+        c += platform.get(0).getPlatform().getFitWidth()+ 40;
+        r = (int)(Math.random()*120+60);
+//        System.out.println("  " + c+"   "+platform.get(0).getPlatform().getFitWidth()+"   "+0);
+        platform.get(0).display(rootmain);
+
+        for(int i = 1; i< 13; i++){
             Platform p = new Platform(rootmain);
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
-            c += platform.get(i).getPlatform().getFitWidth()+ 40;
+            c += platform.get(i).getPlatform().getFitWidth()+ 140;
             r = (int)(Math.random()*120+100);
-            System.out.println("  " + c+"   "+platform.get(i).getPlatform().getFitWidth()+"   "+i);
+//            System.out.println("  " + c+"   "+platform.get(i).getPlatform().getFitWidth()+"   "+i);
             platform.get(i).display(rootmain);
         }
     }
@@ -169,8 +191,7 @@ public class GameController implements Initializable {
         generateplatforms();
         Animations.translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         Animations.translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
-
-
+        exitgame.start();
 }
 
 
@@ -350,7 +371,6 @@ public class GameController implements Initializable {
             for(int i = 0; i< 13; i++){
                 if(checkCollision(hero.getHero(), platform.get(i).getPlatform()) == true ){
                     hero.setonplatform(true);
-                    System.out.println("on platform");
                     falg_col = true;
 //                    hero.getMovedown().stop();
 //                    hero.moveupplay();
@@ -364,25 +384,26 @@ public class GameController implements Initializable {
     AnimationTimer exitgame  = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            exitgame_popup.toFront();
-            TranslateTransition translate = new TranslateTransition(Duration.millis(400), exitgame_popup);
-            translate.setToX((rootmain.getPrefWidth()+((Node)exitgame_popup).getBoundsInLocal().getWidth())/2);
-            translate.play();
-            onscreen = true;
-//            boolean flagcool = false;
-//            for(int i = 0; i< 13; i++){
-//                if(checkCollision(hero.getHero(), platform.get(i).getPlatform()) == true ){
-//                    hero.setonplatform(true);
-//                    System.out.println("on platform");
-//                    falg_col = true;
-////                    hero.getMovedown().stop();
-////                    hero.moveupplay();
-//                    return;
-//                }
-//            }
+            if(hero.isFlagexit() == true) {
+                coll.stop();
+                onscreen = true;
+                game_over_popup.toFront();
+                TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
+                translate.setToX(-(rootmain.getPrefWidth() + ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
+                translate.play();
+                exitgame.stop();
+            }
         }
     };
 
+
+    @FXML
+    void restart_game(MouseEvent event) throws Exception {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        removeplatforms();
+        generateplatforms();
+        displaygame(stage);
+    }
 
 
     @FXML
@@ -407,8 +428,9 @@ public class GameController implements Initializable {
             }
         }
        if(event.getCode() == KeyCode.SPACE && !onhomescreen && !onscreen){
-           System.out.println("spacce detected");
-            coll.stop();
+           coll.stop();
+           hero.setAnother_space(true);
+           System.out.println("was in space");
            Thread thread1 = new Thread() {
                @Override
                public void run() {
@@ -422,7 +444,7 @@ public class GameController implements Initializable {
                public void run(){
                    coll.start();
                    if(falg_col) {
-                       System.out.println("on platform");
+                   hero.getHero().getBoundsInParent().intersects(platform.get(0).getPlatform().getBoundsInParent());
                    }
                }
            };
@@ -432,10 +454,16 @@ public class GameController implements Initializable {
         Thread thread3 = new Thread(){
             @Override
             public void run(){
-                int count = 5;
                 for(int i = 0; i< 13; i++){
-                    Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1).play();
+                    moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
                 }
+//                moveplatforms.get(12).setOnFinished(e -> {
+//                    if
+//                        });
+                for(int i = 0; i< 13; i++){
+                    moveplatforms.get(i).play();
+                }
+
             }
         };
 

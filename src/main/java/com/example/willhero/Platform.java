@@ -12,11 +12,11 @@ public class Platform{
     private ImageView platform;
     private boolean onscreen;
 
-    Platform(AnchorPane mainpane){
+    Platform(AnchorPane mainpane, int i){
         platform = new ImageView();
         onscreen = false;
         int r = (int)(Math.random()*6+1);
-        if(platform_id == 0){
+        if(i == 0){
             platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
             platform.setFitHeight(125);
             platform.setFitWidth(450);
@@ -62,6 +62,10 @@ public class Platform{
         platform_id++;
         platform.setX(400);
         platform.setY(435);
+    }
+
+    Platform(AnchorPane mainpane){
+        this(mainpane, 1);
     }
 
     public void setPlatformx(double x){
@@ -120,6 +124,10 @@ public class Platform{
 
     public boolean collide() {
         return false;
+    }
+
+    public static void setplatform_id(int i){
+        platform_id = i;
     }
 }
 

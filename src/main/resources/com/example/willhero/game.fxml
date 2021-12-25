@@ -244,7 +244,7 @@
             </AnchorPane>
          </children>
       </Group>
-      <ImageView fx:id="pause_gamebutton" fitHeight="51.0" fitWidth="50.0" layoutX="19.0" layoutY="18.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pause_gamebutton" fitHeight="51.0" fitWidth="50.0" layoutX="18.0" layoutY="62.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
       <Group fx:id="pause_game_popup" layoutX="337.0" layoutY="-393.0">
          <children>
             <AnchorPane prefHeight="382.0" prefWidth="312.0">
@@ -268,6 +268,39 @@
             </AnchorPane>
          </children>
       </Group>
-      <Group layoutX="56.0" layoutY="413.0" />
+      <Group layoutX="881.0" layoutY="232.0" />
+      <Group fx:id="game_over_popup" layoutX="1016.0" layoutY="161.0">
+         <children>
+            <AnchorPane prefHeight="263.0" prefWidth="414.0">
+               <children>
+                  <ImageView fitHeight="270.0" fitWidth="409.0" layoutX="4.0" layoutY="1.0">
+                     <image>
+                        <Image url="@../../../backgpop.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="81.0" layoutY="39.0" text="GAME OVER" textFill="#fffefe">
+                     <font>
+                        <Font name="Aparajita Bold" size="50.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="125.0" layoutY="122.0" text="Want to Revive !!!" textFill="WHITE">
+                     <font>
+                        <Font name="Arial Narrow Bold" size="23.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="73.0" fitWidth="200.0" layoutX="4.0" layoutY="180.0" onMouseClicked="#restart_game">
+                     <image>
+                        <Image url="@../../../continue-button.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="58.0" fitWidth="194.0" layoutX="205.0" layoutY="188.0">
+                     <image>
+                        <Image url="@../../../cancel.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </Group>
    </children>
 </AnchorPane>
