@@ -28,8 +28,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 
-//#0098cc
-//rgba(0,152,204,204)
+
 public class Game extends Application implements Serializable{
     private Stage greeting_stage;
 
@@ -61,26 +60,6 @@ public class Game extends Application implements Serializable{
         display.play();
 
     }
-
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        try {
-//            TimeUnit.MILLISECONDS.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        Parent root = null;
-//        try {
-//            root = FXMLLoader.load(getClass().getResource("game.fxml"));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        Stage stage1 = (Stage)(greeting_stage).getScene().getWindow();
-//        Scene scene = new Scene(root, Color.rgb(29,200,255,1));
-//        scene.setFill(Color.rgb(29,200,255,1));
-//        stage1.setScene(scene);
-//        stage1.show();
-//    }
 
     public static void main(String[] args) {
         launch();
