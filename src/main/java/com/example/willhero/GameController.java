@@ -103,9 +103,9 @@ public class GameController implements Initializable {
     private ArrayList<Cloud> clouds = new ArrayList<Cloud>();
     private ArrayList<Platform> platform = new ArrayList<Platform>();
     private ArrayList<Orc> orcs = new ArrayList<Orc>();
-//    private ArrayList<ImageView> platform = new ArrayList<ImageView>();
 
     private ArrayList<TranslateTransition> moveplatforms = new ArrayList<TranslateTransition>();
+
 
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
@@ -151,6 +151,7 @@ public class GameController implements Initializable {
         t.play();
     }
 
+
     public void removeplatforms(){
         Platform.setplatform_id(0);Platform.setplatform_id(0);
         for(int i = 12; i >= 0; i--){
@@ -168,7 +169,6 @@ public class GameController implements Initializable {
         platform.get(0).setPlatformx(c+r);
         c += platform.get(0).getPlatform().getFitWidth()+ 40;
         r = (int)(Math.random()*120+60);
-//        System.out.println("  " + c+"   "+platform.get(0).getPlatform().getFitWidth()+"   "+0);
         platform.get(0).display(rootmain);
 
         for(int i = 1; i< 13; i++){
@@ -177,10 +177,16 @@ public class GameController implements Initializable {
             platform.get(i).setPlatformx(c+r);
             c += platform.get(i).getPlatform().getFitWidth()+ 140;
             r = (int)(Math.random()*120+100);
-//            System.out.println("  " + c+"   "+platform.get(i).getPlatform().getFitWidth()+"   "+i);
             platform.get(i).display(rootmain);
         }
     }
+
+    public void generateorcs(){
+        for(int i = 1; i< platform.size(); i++){
+//            Orc o = new orc(an)
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -429,7 +435,7 @@ public class GameController implements Initializable {
         }
        if(event.getCode() == KeyCode.SPACE && !onhomescreen && !onscreen){
            coll.stop();
-           hero.setAnother_space(true);
+           hero.setAnother_space();
            System.out.println("was in space");
            Thread thread1 = new Thread() {
                @Override

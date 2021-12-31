@@ -66,3 +66,44 @@ public class Game extends Application implements Serializable{
     }
 }
 
+
+
+//    public void generateplatforms(){
+//        int c = 100;
+//        int r = 0;
+//
+//        Platform p1 = new Platform(rootmain, 0);
+//        platform.add(p1);
+//        platform.get(0).setPlatformx(c+r);
+//        c += platform.get(0).getPlatform().getFitWidth();
+//        r = 50;
+//        platform.get(0).display(rootmain);
+//
+//        for(int i = 1; i< 13; i++){
+//            Platform p = new Platform(rootmain);
+//            platform.add(p);
+//            platform.get(i).setPlatformx(c+r);
+//            c += platform.get(i).getPlatform().getFitWidth();
+//            r = 50;
+//            platform.get(i).display(rootmain);
+//            System.out.println(platform.get(i).getPlatform().getFitWidth());
+//        }
+//    }
+
+
+
+//    public void generateorcs(){
+//        for(int i = 1; i< platform.size(); i++){
+//            if(platform.get(i).getPlatform().getFitWidth() >= 300){
+//                for(int j = 0; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++){
+//                    Orc o = new Orc();
+//                    orcs.add(o);
+//                }
+//            }
+//            Orc o = new Orc();
+//            orcs.add(o);
+//
+//        }
+//    }
+
+

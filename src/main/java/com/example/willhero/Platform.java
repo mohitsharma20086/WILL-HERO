@@ -3,58 +3,66 @@ package com.example.willhero;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+// no platform7   add the image
 
 public class Platform{
     private static int platform_id = 0;
     private static int distance = 0;
     private ImageView platform;
     private boolean onscreen;
+    private ArrayList<Orc> orcs = new ArrayList<Orc>();
 
     Platform(AnchorPane mainpane, int i){
         platform = new ImageView();
         onscreen = false;
-        int r = (int)(Math.random()*6+1);
-        if(i == 0){
+        int r = (int)(Math.random()*10+1);
+        if(i == 0){                 //set first platform
             platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
             platform.setFitHeight(125);
             platform.setFitWidth(450);
         }
         else{
+            String path = "src/main/resources/platform"+r+".png";
+            platform.setImage(new Image((new File(path)).toURI().toString()));
+            platform.setFitHeight(120);
+            platform.setFitWidth(450);
             if(r == 1){
-                platform.setImage(new Image((new File("src/main/resources/platform1.png")).toURI().toString()));
+
                 platform.setFitHeight(80);
                 platform.setFitWidth(90);
             }
             else if(r == 2) {
-                platform.setImage(new Image((new File("src/main/resources/platform2.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platform2.png")).toURI().toString()));
                 platform.setFitHeight(100);
                 platform.setFitWidth(83);
             }
             else if(r == 3) {
-                platform.setImage(new Image((new File("src/main/resources/platform3.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platform3.png")).toURI().toString()));
                 platform.setFitHeight(120);
                 platform.setFitWidth(90);
             }
             else if(r == 4) {
-                platform.setImage(new Image((new File("src/main/resources/platform4.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platform4.png")).toURI().toString()));
                 platform.setFitHeight(120);
                 platform.setFitWidth(90);
             }
             else if(r == 5) {
 //                shi krna h
-                platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
                 platform.setFitHeight(120);
                 platform.setFitWidth(450);
             }
             else if(r == 6) {
-                platform.setImage(new Image((new File("src/main/resources/platform6.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platform6.png")).toURI().toString()));
                 platform.setFitHeight(120);
                 platform.setFitWidth(500);
             }
             else if(r == 7) {
-                platform.setImage(new Image((new File("src/main/resources/platform8.png")).toURI().toString()));
+//                platform.setImage(new Image((new File("src/main/resources/platform8.png")).toURI().toString()));
                 platform.setFitHeight(120);
                 platform.setFitWidth(800);
             }
@@ -62,6 +70,8 @@ public class Platform{
         platform_id++;
         platform.setX(400);
         platform.setY(435);
+
+        System.out.println(r);
     }
 
     Platform(AnchorPane mainpane){
@@ -72,12 +82,9 @@ public class Platform{
         platform.setX(x);
     }
 
-
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(platform);
         platform.toFront();
-//        System.out.printf("here   ");
-//        System.out.println(platform.getX());
     }
 
     public void remove(AnchorPane mainpane){

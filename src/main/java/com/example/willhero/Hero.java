@@ -134,14 +134,15 @@ public class Hero {
 
 package com.example.willhero;
 
-        import javafx.animation.AnimationTimer;
-        import javafx.animation.TranslateTransition;
-        import javafx.scene.image.Image;
-        import javafx.scene.image.ImageView;
-        import javafx.scene.layout.AnchorPane;
-        import javafx.util.Duration;
+import javafx.animation.AnimationTimer;
+import javafx.animation.TranslateTransition;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
-        import java.io.File;
+import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Hero {
     private TranslateTransition herojump;
@@ -149,8 +150,8 @@ public class Hero {
     private ImageView hero;
 
     private boolean flagonplatform = true;
+    private AtomicBoolean another_space = new AtomicBoolean(false);
     private boolean flagexit = false;
-    private boolean another_space = false;
 
 
 //    private TranslateTransition moveup;
@@ -189,33 +190,44 @@ public class Hero {
 
     public void moveforward(){
         flagonplatform = false;
-        another_space = false;
         herojump.stop();
+        another_space.set(false);
         TranslateTransition movefor = Animations.translateTransition(hero, 100, 70, 0, false, 1);
         TranslateTransition translate = new TranslateTransition(Duration.millis(300),hero);
         translate.setCycleCount(1);
         translate.setToY(3);
         translate.setAutoReverse(false);
+//        ak:
         movefor.play();
         try {
-            Thread.sleep(100);
+            Thread.sleep(120);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        if(another_space == true){
-//            movefor.setOnFinished(e ->{
-//                TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
+
+//        movefor.setOnFinished(e ->{
+//            System.out.println("in here");
+//            if(another_space.get() == true) {
+//                System.out.println("in here here");
+//                TranslateTransition translate1 = new TranslateTransition(Duration.millis(300), hero);
 //                translate1.setCycleCount(1);
 //                translate1.setByY(5);
 //                translate1.setAutoReverse(false);
 //                translate1.play();
-//                another_space = false;
+//                another_space.set(false);
 //                movefor.play();
-//                translate.play();
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e1) {
+//                    e1.printStackTrace();
+//                }
+////                translate.play();
+//            }
 //            });
-//        }
+
         translate.play();
         translate.setOnFinished(e -> {
+            System.out.println(flagonplatform);
             if(flagonplatform == false){
                 flagexit = true;
                 TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
@@ -227,7 +239,6 @@ public class Hero {
             else {
                 herojump.play();
             }
-//            herojump.play();
         });
     }
 
@@ -235,13 +246,6 @@ public class Hero {
         return hero;
     }
 
-
-    public boolean checkCollision(ImageView imageView, ImageView imageView2){
-        if(imageView.getBoundsInParent().intersects(imageView2.getBoundsInParent())){
-            return true;
-        }
-        return false;
-    }
 
     public void setonplatform(boolean f){
         flagonplatform = f;
@@ -251,7 +255,7 @@ public class Hero {
         return flagexit;
     }
 
-    public void setAnother_space(boolean another_space) {
-        this.another_space = another_space;
+    public void setAnother_space() {
+        this.another_space.set(true);
     }
 }
