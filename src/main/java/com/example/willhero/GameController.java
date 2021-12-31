@@ -105,6 +105,10 @@ public class GameController implements Initializable {
     private ArrayList<Orc> orcs = new ArrayList<Orc>();
 
     private ArrayList<TranslateTransition> moveplatforms = new ArrayList<TranslateTransition>();
+    private ArrayList<TranslateTransition> moveorcs = new ArrayList<TranslateTransition>();
+
+    private ArrayList<TranslateTransition> moveplatformsback = new ArrayList<TranslateTransition>();
+    private ArrayList<TranslateTransition> moveorcsback = new ArrayList<TranslateTransition>();
 
 
 
@@ -182,10 +186,31 @@ public class GameController implements Initializable {
     }
 
     public void generateorcs(){
+        int count = 0;
         for(int i = 1; i< platform.size(); i++){
-//            Orc o = new orc(an)
+            if(platform.get(i).getPlatform().getFitWidth() >= 300){
+                for(int j = 0; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++){
+                    Orc o = new Orc();
+                    o.setX(platform.get(i).getPlatform().getX()+Math.random()*platform.get(i).getPlatform().getFitWidth());
+                    orcs.add(o);
+                    count++;
+                }
+            }
+            else{
+                Orc o = new Orc();
+                o.setX(platform.get(i).getPlatform().getX());
+                orcs.add(o);
+//                System.out.println("in here  "+ platform.get(i).getPlatform().getX()+"  " +count);
+                count++;
+            }
+
+        }
+        for(int i = 1; i< orcs.size(); i++){
+            orcs.get(i).display(rootmain);
+            orcs.get(i).jumporc();
         }
     }
+
 
 
     @Override
@@ -195,9 +220,17 @@ public class GameController implements Initializable {
         hero.jumphero();
         moveclouds();
         generateplatforms();
+        generateorcs();
         Animations.translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         Animations.translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
         exitgame.start();
+
+        for(int i = 0; i< platform.size(); i++){
+            moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
+        }
+        for(int i = 0; i< orcs.size(); i++){
+            moveorcs.add(Animations.translateTransition(orcs.get(i).getOrc(), 300, -150, 0, false, 1));
+        }
 }
 
 
@@ -362,24 +395,35 @@ public class GameController implements Initializable {
         }
     }
 
-    public boolean checkCollision(ImageView imageView, ImageView imageView2){
-        if(imageView.getBoundsInParent().intersects(imageView2.getBoundsInParent())){
-//            System.out.println("on platform");
-            return true;
-        }
-        return false;
-    }
+//    public boolean checkCollision(ImageView imageView, ImageView imageView2){
+//        if(){
+////            System.out.println("on platform");
+//            return true;
+//        }
+//        return false;
+//    }
 
-    AnimationTimer coll  = new AnimationTimer() {
+    AnimationTimer collplatform  = new AnimationTimer() {
         @Override
         public void handle(long l) {
             boolean flagcool = false;
             for(int i = 0; i< 13; i++){
-                if(checkCollision(hero.getHero(), platform.get(i).getPlatform()) == true ){
+                if(hero.getHero().getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
                     hero.setonplatform(true);
                     falg_col = true;
-//                    hero.getMovedown().stop();
-//                    hero.moveupplay();
+                    return;
+                }
+            }
+        }
+    };
+
+    AnimationTimer collorc  = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            boolean flagcool = false;
+            for(int i = 0; i< orcs.size(); i++){
+                if(hero.getHero().getBoundsInParent().intersects(orcs.get(i).getOrc().getBoundsInParent()) == true ){
+                    orcs.get(i).oncollide(hero);
                     return;
                 }
             }
@@ -391,7 +435,14 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             if(hero.isFlagexit() == true) {
-                coll.stop();
+                for (int i = 0; i < moveplatformsback.size(); i++) {
+                    moveplatformsback.get(i).stop();
+                }
+                for (int i = 0; i < moveorcsback.size(); i++) {
+                    moveorcsback.get(i).stop();
+                }
+                collplatform.stop();
+                collorc.stop();
                 onscreen = true;
                 game_over_popup.toFront();
                 TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
@@ -413,7 +464,7 @@ public class GameController implements Initializable {
 
 
     @FXML
-    void startgame(KeyEvent event) {
+    void startgame(KeyEvent event) throws InterruptedException {
         if(!onscreen){
             if(event.getCode() == KeyCode.SPACE && onhomescreen){
                 //Move All the Icons out of the screen
@@ -434,9 +485,16 @@ public class GameController implements Initializable {
             }
         }
        if(event.getCode() == KeyCode.SPACE && !onhomescreen && !onscreen){
-           coll.stop();
-           hero.setAnother_space();
            System.out.println("was in space");
+           for (int i = 0; i < moveplatformsback.size(); i++) {
+               moveplatformsback.get(i).stop();
+           }
+           for (int i = 0; i < moveorcsback.size(); i++) {
+               moveorcsback.get(i).stop();
+           }
+           collplatform.stop();
+           collorc.stop();
+           hero.setAnother_space();
            Thread thread1 = new Thread() {
                @Override
                public void run() {
@@ -444,38 +502,70 @@ public class GameController implements Initializable {
                }
            };
 
-
            Thread thread2 = new Thread(){
                @Override
                public void run(){
-                   coll.start();
-                   if(falg_col) {
-                   hero.getHero().getBoundsInParent().intersects(platform.get(0).getPlatform().getBoundsInParent());
+                   collplatform.start();
+                   collorc.start();
+               }
+           };
+
+           Thread thread4 = new Thread(){
+               @Override
+               public void run(){
+                   for(int i = 0; i< moveorcs.size(); i++){
+                       moveorcs.get(i).play();
                    }
                }
            };
 
 
 
-        Thread thread3 = new Thread(){
-            @Override
-            public void run(){
-                for(int i = 0; i< 13; i++){
-                    moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
-                }
-//                moveplatforms.get(12).setOnFinished(e -> {
-//                    if
-//                        });
-                for(int i = 0; i< 13; i++){
-                    moveplatforms.get(i).play();
-                }
-
-            }
-        };
+           Thread thread3 = new Thread(){
+               @Override
+               public void run(){
+                   for(int i = 0; i< moveplatforms.size(); i++){
+                       moveplatforms.get(i).play();
+                   }
+               }
+           };
 
            thread1.start();
            thread3.start();
            thread2.start();
+           thread4.start();
+//           thread3.join();
+
+//           try {
+//               Thread.sleep(300);
+//           } catch (InterruptedException e) {
+//               e.printStackTrace();
+//           }
+//           moveplatforms.get(moveplatforms.size()-1).setOnFinished(e->{
+//               double temp = -70;
+//               System.out.println(temp);
+//               for (int i = 0; i < moveplatformsback.size(); i++) {
+//                   moveplatformsback.remove(i);
+//               }
+//               for (int i = 0; i < moveorcsback.size(); i++) {
+//                   moveorcsback.remove(i);
+//               }
+//               for (int i = 0; i < platform.size(); i++) {
+//                   moveplatformsback.add(Animations.translateTransition(platform.get(i).getPlatform(), 3000, temp, 0, false, 1));
+//               }
+//               for (int i = 0; i < orcs.size(); i++) {
+//                   moveorcsback.add(Animations.translateTransition(orcs.get(i).getOrc(), 3000, temp, 0, false, 1));
+//               }
+//               for (int i = 0; i < moveplatformsback.size(); i++) {
+//                   moveplatformsback.get(i).play();
+//               }
+//               for (int i = 0; i < moveorcsback.size(); i++) {
+//                   moveorcsback.get(i).play();
+//               }
+//               hero.moveback();
+//           }
+//           );
+
 
        }
         if(String.valueOf(event.getCode()) == "q" || String.valueOf(event.getCode()) == "Q"){
