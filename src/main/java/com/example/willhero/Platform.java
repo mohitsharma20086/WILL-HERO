@@ -14,16 +14,18 @@ public class Platform{
     private static int distance = 0;
     private ImageView platform;
     private boolean onscreen;
+    private int ra = 0;
     private ArrayList<Orc> orcs = new ArrayList<Orc>();
 
-    private double platformw[] = {90,83,90,90, 450, 800, 500,500,450,350};
-    private double platformh[] = {80,100,120,120, 120, 120, 120,120,120,120};
+    private double platformw[] = {450,340,300,90,300, 350, 550, 150,500,200};
+    private double platformh[] = {125,130,125,120,120, 120, 120, 130,120,125};
 
     Platform(AnchorPane mainpane, int i){
         platform = new ImageView();
         onscreen = false;
 
         int r = (int)(Math.random()*9+1);
+        ra = r;
         if(i == 0){                 //set first platform
             platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
             platform.setFitHeight(125);
@@ -105,7 +107,7 @@ public class Platform{
     }
 
     public double getplatformw(int i){
-        return platform.getFitWidth();
+        return platformw[ra];
     }
 }
 

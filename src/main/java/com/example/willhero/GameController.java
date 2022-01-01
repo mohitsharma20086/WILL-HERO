@@ -177,7 +177,7 @@ public class GameController implements Initializable {
         hero.addplatformd(c+r,p1.getplatformw(0));
         c += platform.get(0).getPlatform().getFitWidth()+ 40;
 
-        r = (int)(Math.random()*120+60);
+        r = ((int)(Math.random()*60+40)/10)*10;
         platform.get(0).display(rootmain);
 
         for(int i = 1; i< 13; i++){
@@ -185,12 +185,10 @@ public class GameController implements Initializable {
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
             hero.addplatformd(c+r,p.getplatformw(i));
-            c += platform.get(i).getPlatform().getFitWidth()+ 140;
-            r = (int)(Math.random()*120+100);
+            c += platform.get(i).getPlatform().getFitWidth()+ 60;
+            r = ((int)(Math.random()*60+40)/10)*10;
             platform.get(i).display(rootmain);
         }
-
-//        hero.setPlatform(platform);
     }
 
     public void removegameobj(){
@@ -201,33 +199,39 @@ public class GameController implements Initializable {
     }
     public void generategameobj(){
         for(int i = 1; i< platform.size(); i++){
-            if(platform.get(i).getPlatform().getFitWidth() >= 300){
-                if ((int)(Math.random() * 8) == 2) {
+//            if(platform.get(i).getPlatform().getFitWidth() >= 300){
+                if ((int)(Math.random() * 8) == 2 && platform.get(i).getPlatform().getFitWidth() >= 380) {
                     Chest c = new Chest();
-                    System.out.println("In here");
-                    c.setX(platform.get(i).getPlatform().getX() + 120);
+                    c.setX(platform.get(i).getPlatform().getX() + 60);
                     gameobjects.add(c);
                 }
                 else{
-                    Orc o = new Orc();
-                    o.setX(platform.get(i).getPlatform().getX()+70);
-                    gameobjects.add(o);
-                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++) {
+                    if(i ==2){
+                        Chest c = new Chest();
+                        c.setX(Math.random()*(platform.get(i).getPlatform().getX()-120));
+                        gameobjects.add(c);
+                    }
+                    if((int)Math.random() == 0) {
+                        Orc o = new Orc();
+                        o.setX(platform.get(i).getPlatform().getX() + 50);
+                        gameobjects.add(o);
+                    }
+                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/400 +1; j++) {
                         if ((int)(Math.random() * 10) == 2) {
                             Chest c = new Chest();
-                            System.out.println("In here");
-                            c.setX(platform.get(i).getPlatform().getX() + 120 * (j+1));
+//                            System.out.println("In here");
+                            c.setX(platform.get(i).getPlatform().getX() + 200 *j);
                             gameobjects.add(c);
                         }
-                        else{
+                        else if(Math.floor((Math.random()*3) + 1) != 1){
                             Orc o1 = new Orc();
-                            o1.setX(platform.get(i).getPlatform().getX() + 120 * (j + 1));
+                            o1.setX(platform.get(i).getPlatform().getX() + 300*j);
                             gameobjects.add(o1);
                         }
                     }
                 }
 
-            }
+//            }
         }
         for(int i = 1; i< gameobjects.size(); i++){
             gameobjects.get(i).display(rootmain);
@@ -239,7 +243,6 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        System.out.println("IN game");
         hero = new Hero(rootmain);
         hero.jump();
         moveclouds();
@@ -419,13 +422,6 @@ public class GameController implements Initializable {
         }
     }
 
-//    public boolean checkCollision(ImageView imageView, ImageView imageView2){
-//        if(){
-////            System.out.println("on platform");
-//            return true;
-//        }
-//        return false;
-//    }
 
     public static void checkcoll(){
         g.collplatform.start();
@@ -448,10 +444,33 @@ public class GameController implements Initializable {
     AnimationTimer collorc  = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            boolean flagcool = false;
             for(int i = 0; i< gameobjects.size(); i++){
                 if(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
+                    for (int j = 0; j < moveplatformsback.size(); j++) {
+                        moveplatformsback.get(j).stop();
+                    }
+                    for (int j = 0; j < moveorcsback.size(); j++) {
+                        moveorcsback.get(j).stop();
+                    }
                     gameobjects.get(i).oncollide(hero);
+                    return;
+                }
+            }
+        }
+    };
+
+    AnimationTimer collorcwithweapon = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            for(int i = 0; i< gameobjects.size(); i++){
+                if(hero.getCurrentweapon().getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
+                    for (int j = 0; j < moveplatformsback.size(); j++) {
+                        moveplatformsback.get(j).stop();
+                    }
+                    for (int j = 0; j < moveorcsback.size(); j++) {
+                        moveorcsback.get(j).stop();
+                    }
+                    gameobjects.get(i).oncollide(hero.getCurrentweapon());
                     return;
                 }
             }
@@ -488,6 +507,7 @@ public class GameController implements Initializable {
         removeplatforms();
         generateplatforms();
         removegameobj();
+        hero.setcuurentplatform(0);
         generategameobj();
         displaygame(stage);
     }
@@ -515,7 +535,7 @@ public class GameController implements Initializable {
             }
         }
        if(event.getCode() == KeyCode.SPACE && !onhomescreen && !onscreen){
-           System.out.println("was in space");
+//           System.out.println("was in space");
            for (int i = 0; i < moveplatformsback.size(); i++) {
                moveplatformsback.get(i).stop();
            }
@@ -562,7 +582,7 @@ public class GameController implements Initializable {
            thread3.start();
            thread2.start();
            thread4.start();
-
+//           System.out.println((int)(Math.random()*2));
 //           try {
 //               Thread.sleep(300);
 //           } catch (InterruptedException e) {
