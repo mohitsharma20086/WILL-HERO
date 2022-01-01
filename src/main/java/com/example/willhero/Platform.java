@@ -16,10 +16,14 @@ public class Platform{
     private boolean onscreen;
     private ArrayList<Orc> orcs = new ArrayList<Orc>();
 
+    private double platformw[] = {90,83,90,90, 450, 800, 500,500,450,350};
+    private double platformh[] = {80,100,120,120, 120, 120, 120,120,120,120};
+
     Platform(AnchorPane mainpane, int i){
         platform = new ImageView();
         onscreen = false;
-        int r = (int)(Math.random()*10+1);
+
+        int r = (int)(Math.random()*9+1);
         if(i == 0){                 //set first platform
             platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
             platform.setFitHeight(125);
@@ -28,44 +32,9 @@ public class Platform{
         else{
             String path = "src/main/resources/platform"+r+".png";
             platform.setImage(new Image((new File(path)).toURI().toString()));
-            platform.setFitHeight(120);
-            platform.setFitWidth(450);
-            if(r == 1){
+            platform.setFitHeight(platformh[r]);
+            platform.setFitWidth(platformw[r]);
 
-                platform.setFitHeight(80);
-                platform.setFitWidth(90);
-            }
-            else if(r == 2) {
-//                platform.setImage(new Image((new File("src/main/resources/platform2.png")).toURI().toString()));
-                platform.setFitHeight(100);
-                platform.setFitWidth(83);
-            }
-            else if(r == 3) {
-//                platform.setImage(new Image((new File("src/main/resources/platform3.png")).toURI().toString()));
-                platform.setFitHeight(120);
-                platform.setFitWidth(90);
-            }
-            else if(r == 4) {
-//                platform.setImage(new Image((new File("src/main/resources/platform4.png")).toURI().toString()));
-                platform.setFitHeight(120);
-                platform.setFitWidth(90);
-            }
-            else if(r == 5) {
-//                shi krna h
-//                platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
-                platform.setFitHeight(120);
-                platform.setFitWidth(450);
-            }
-            else if(r == 6) {
-//                platform.setImage(new Image((new File("src/main/resources/platform6.png")).toURI().toString()));
-                platform.setFitHeight(120);
-                platform.setFitWidth(500);
-            }
-            else if(r == 7) {
-//                platform.setImage(new Image((new File("src/main/resources/platform8.png")).toURI().toString()));
-                platform.setFitHeight(120);
-                platform.setFitWidth(800);
-            }
         }
         platform_id++;
         platform.setX(400);
@@ -133,6 +102,10 @@ public class Platform{
 
     public static void setplatform_id(int i){
         platform_id = i;
+    }
+
+    public double getplatformw(int i){
+        return platform.getFitWidth();
     }
 }
 
