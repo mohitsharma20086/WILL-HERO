@@ -179,8 +179,8 @@ public class GameController implements Initializable {
 
         r = ((int)(Math.random()*60+40)/10)*10;
         platform.get(0).display(rootmain);
-
-        for(int i = 1; i< 13; i++){
+        int i = 1;
+        while ( c <= 107*200){
             Platform p = new Platform(rootmain);
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
@@ -188,7 +188,13 @@ public class GameController implements Initializable {
             c += platform.get(i).getPlatform().getFitWidth()+ 60;
             r = ((int)(Math.random()*60+40)/10)*10;
             platform.get(i).display(rootmain);
+            i++;
         }
+        Platform p = new Platform(rootmain,-1);
+        platform.add(p);
+        platform.get(i).setPlatformx(c+r);
+        hero.addplatformd(c+r,p.getplatformw(i));
+        platform.get(i).display(rootmain);
     }
 
     public void removegameobj(){
@@ -198,7 +204,7 @@ public class GameController implements Initializable {
         }
     }
     public void generategameobj(){
-        for(int i = 1; i< platform.size(); i++){
+        for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2 && platform.get(i).getPlatform().getFitWidth() >= 380) {
                     Chest c = new Chest();
@@ -212,11 +218,11 @@ public class GameController implements Initializable {
                         gameobjects.add(c);
                     }
                     if((int)Math.random() == 0) {
-                        Orc o = new Orc();
+                        NormalOrc o = new NormalOrc();
                         o.setX(platform.get(i).getPlatform().getX() + 50);
                         gameobjects.add(o);
                     }
-                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/400 +1; j++) {
+                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/400; j++) {
                         if ((int)(Math.random() * 10) == 2) {
                             Chest c = new Chest();
 //                            System.out.println("In here");
@@ -224,15 +230,16 @@ public class GameController implements Initializable {
                             gameobjects.add(c);
                         }
                         else if(Math.floor((Math.random()*3) + 1) != 1){
-                            Orc o1 = new Orc();
+                            NormalOrc o1 = new NormalOrc();
                             o1.setX(platform.get(i).getPlatform().getX() + 300*j);
                             gameobjects.add(o1);
                         }
                     }
                 }
-
-//            }
         }
+        BossOrc o1 = new BossOrc();
+        o1.setX(platform.get(platform.size()-1).getPlatform().getX() + 300);
+        gameobjects.add(o1);
         for(int i = 1; i< gameobjects.size(); i++){
             gameobjects.get(i).display(rootmain);
             gameobjects.get(i).jump();
@@ -431,7 +438,7 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             boolean flagcool = false;
-            for(int i = 0; i< 13; i++){
+            for(int i = 0; i< platform.size(); i++){
                 if(hero.getImage().getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
                     hero.setonplatform(true);
                     falg_col = true;
@@ -446,6 +453,7 @@ public class GameController implements Initializable {
         public void handle(long l) {
             for(int i = 0; i< gameobjects.size(); i++){
                 if(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
+//                    System.out.println(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()));
                     for (int j = 0; j < moveplatformsback.size(); j++) {
                         moveplatformsback.get(j).stop();
                     }
@@ -463,15 +471,17 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             for(int i = 0; i< gameobjects.size(); i++){
-                if(hero.getCurrentweapon().getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
-                    for (int j = 0; j < moveplatformsback.size(); j++) {
-                        moveplatformsback.get(j).stop();
+                if(hero.getCurrentweapon() != null) {
+                    if (hero.getCurrentweapon().getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true) {
+                        for (int j = 0; j < moveplatformsback.size(); j++) {
+                            moveplatformsback.get(j).stop();
+                        }
+                        for (int j = 0; j < moveorcsback.size(); j++) {
+                            moveorcsback.get(j).stop();
+                        }
+                        gameobjects.get(i).oncollide(hero.getCurrentweapon());
+                        return;
                     }
-                    for (int j = 0; j < moveorcsback.size(); j++) {
-                        moveorcsback.get(j).stop();
-                    }
-                    gameobjects.get(i).oncollide(hero.getCurrentweapon());
-                    return;
                 }
             }
         }
@@ -482,20 +492,21 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             if(hero.isFlagexit() == true) {
-                for (int i = 0; i < moveplatformsback.size(); i++) {
-                    moveplatformsback.get(i).stop();
-                }
-                for (int i = 0; i < moveorcsback.size(); i++) {
-                    moveorcsback.get(i).stop();
-                }
-                collplatform.stop();
-                collorc.stop();
-                onscreen = true;
-                game_over_popup.toFront();
-                TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
-                translate.setToX(-(rootmain.getPrefWidth() + ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
-                translate.play();
-                exitgame.stop();
+//                for (int i = 0; i < moveplatformsback.size(); i++) {
+//                    moveplatformsback.get(i).stop();
+//                }
+//                for (int i = 0; i < moveorcsback.size(); i++) {
+//                    moveorcsback.get(i).stop();
+//                }
+//                collplatform.stop();
+//                collorc.stop();
+//                collorcwithweapon.stop();
+//                onscreen = true;
+//                game_over_popup.toFront();
+//                TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
+//                translate.setToX(-(rootmain.getPrefWidth() + ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
+//                translate.play();
+//                exitgame.stop();
             }
         }
     };
@@ -544,6 +555,7 @@ public class GameController implements Initializable {
            }
            collplatform.stop();
            collorc.stop();
+           collorcwithweapon.stop();
            hero.setAnother_space();
            Thread thread1 = new Thread() {
                @Override
@@ -557,6 +569,7 @@ public class GameController implements Initializable {
                public void run(){
                    collplatform.start();
                    collorc.start();
+                   collorcwithweapon.start();
                }
            };
 

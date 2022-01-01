@@ -31,6 +31,11 @@ public class Platform{
             platform.setFitHeight(125);
             platform.setFitWidth(450);
         }
+        else if(i == -1){                 //set first platform
+            platform.setImage(new Image((new File("src/main/resources/platformla.png")).toURI().toString()));
+            platform.setFitHeight(125);
+            platform.setFitWidth(450);
+        }
         else{
             String path = "src/main/resources/platform"+r+".png";
             platform.setImage(new Image((new File(path)).toURI().toString()));

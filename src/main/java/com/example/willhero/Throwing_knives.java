@@ -9,9 +9,7 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Throwing_knives extends Weapon {
-    private int distance =1;
-//    private ImageView weaponcopy;
-//    private TranslateTransition jumpwithheroc;
+    private double distance =1;
 
 
     Throwing_knives(Hero h){
@@ -39,25 +37,20 @@ public class Throwing_knives extends Weapon {
 
     public void move(AnchorPane pane) {
 
-        TranslateTransition movefor = Animations.translateTransition(weapon, 35, 120*distance, 0, false, 1);
+        TranslateTransition movefor = Animations.translateTransition(weapon, 100/speed, 100*distance, 0, false, 1);
         movefor.play();
         movefor.setOnFinished(e-> {
-//            weaponcopy.setImage(null);
-            TranslateTransition moveback = Animations.translateTransition(weapon, 35, -120*distance, 0, false, 1);
+            TranslateTransition moveback = Animations.translateTransition(weapon, 100/speed, -100*distance, 0, false, 1);
             moveback.play();
-//            moveback.setOnFinished(e1 ->{
-//                    weaponcopy = new ImageView();
-//                    weaponcopy.setImage(new Image((new File("src/main/resources/Knife.png")).toURI().toString()));
-////                    weaponcopy.setY(weapon.getY());
-////                    weaponcopy.setX(weapon.getX());
-//            });
         });
     }
 
 
     public void setDamage() {
-        this.damage++;
-        this.distance++;
+        super.setDamage();
+        if(distance <= 2){
+            this.distance += 0.2;
+        }
     }
 
 

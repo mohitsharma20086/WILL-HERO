@@ -12,8 +12,8 @@ public abstract class Weapon extends Gameobject {
     protected Hero hero;
     protected TranslateTransition jumpwithhero;
     protected AnchorPane pane;
-    protected int speed = 1;
-    protected int damage = 1;
+    protected double speed = 1.0;
+    protected double damage = 1.0;
 
     public Weapon(Hero h){
         hero = h;
@@ -29,18 +29,18 @@ public abstract class Weapon extends Gameobject {
 
 
     public void setDamage() {
-        this.damage++;
+        this.damage += 0.2;
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 
     public void setSpeed() {
-        this.speed++;
+        this.speed += 0.2;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
