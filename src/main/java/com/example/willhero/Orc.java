@@ -7,12 +7,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Orc extends Gameobject{
     private TranslateTransition orcjump;
     private TranslateTransition translate1;
     private ImageView orc;
+
+    private static ArrayList<Double> platformstarts = new ArrayList<Double>();
+    private static ArrayList<Double> platformsize = new ArrayList<Double>();
+
 
     private boolean flagonplatform = true;
     private AtomicBoolean flagonplatform1 = new AtomicBoolean(true);
@@ -23,6 +28,11 @@ public class Orc extends Gameobject{
         orc.setFitHeight(50);
         orc.setFitWidth(38);
         orc.setY(386);
+    }
+
+    public static void addplatformd(double i, double j){
+        platformstarts.add(i);
+        platformsize.add(j);
     }
 
     public void display(AnchorPane mainpane){
@@ -114,14 +124,35 @@ public class Orc extends Gameobject{
             translate.setAutoReverse(false);
             translate.play();
             translate.setOnFinished(e1 ->{
-                orcjump.play();
+                if(flagonplatform == false ){     // plat start >=
+                    int temp = ((Hero)hero).getSpacecount();
+                    Double t = orc.getX();
+                    int f = -1;
+                    for(int i = 0; i < platformstarts.size();i++) {
+                        System.out.println("start " +(platformstarts.get(i) - temp*(200))+ " " +t);
+                        System.out.println("size " + (platformstarts.get(i) -temp*(200) + platformsize.get(i))+ " " +t);
+                        if (Double.compare(platformstarts.get(i) - temp*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - temp*(200), t) > 0) {
+                            if (Double.compare((platformstarts.get(i) -temp*(200) + platformsize.get(i)), t) > 30) {
+                                System.out.println("on platform  "+(i));
+                                orcjump.play();
+                                f = 0;
+//                                temp = i;
+                                break;
+                            }
+                        }
+                    }
+                    if(f == -1){
+                        TranslateTransition translate2 = new TranslateTransition(Duration.millis(300),orc);
+                        translate2.setCycleCount(1);
+                        translate2.setToY(300);
+                        translate2.setAutoReverse(false);
+                        translate2.play();
+                    }
+                }
+                else{
+                    orcjump.play();
+                }
             });
-//
-//        });
-
-//        TranslateTransition orcjump1=Animations.translateTransition(orc, 300,0,-70, true, -1);
-//        orcjump1.play();
-
     }
 
 }

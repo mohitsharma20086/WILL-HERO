@@ -32,20 +32,20 @@ public class Game extends Application implements Serializable{
         GameController c = new GameController();
         stage.setScene(scene);
         stage.show();
-
-        Timeline display = new Timeline( new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    c.displaygame(stage);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
-        display.play();
+//
+//        Timeline display = new Timeline( new KeyFrame(Duration.millis(2000), new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                try {
+//                    c.displaygame(stage);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }));
+//        display.play();
 
     }
 
