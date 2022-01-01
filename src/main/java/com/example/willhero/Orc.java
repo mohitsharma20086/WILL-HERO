@@ -31,9 +31,11 @@ public class Orc extends Gameobject{
 
     public void jump(){
         orcjump = Animations.translateTransition(orc, 300,0,-70, true, -1);
-        orcjump.play();
     }
 
+    public void remove(AnchorPane mainpane){
+        mainpane.getChildren().remove(orc);
+    }
 
     public void setX(double x){
         orc.setX(x);
@@ -98,7 +100,28 @@ public class Orc extends Gameobject{
     }
 
     public void oncollide(Gameobject hero){
-//        System.out.println("here");
+        orcjump = Animations.translateTransition(orc, 300,0,-70, true, -1);
+        orcjump.stop();
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(100),orc);
+        translate1.setCycleCount(1);
+        translate1.setByX(60);
+        translate1.setAutoReverse(false);
+        translate1.play();
+//        translate1.setOnFinished(e ->{
+            TranslateTransition translate = new TranslateTransition(Duration.millis(100),orc);
+            translate.setCycleCount(1);
+            translate.setToY(3);
+            translate.setAutoReverse(false);
+            translate.play();
+            translate.setOnFinished(e1 ->{
+                orcjump.play();
+            });
+//
+//        });
+
+//        TranslateTransition orcjump1=Animations.translateTransition(orc, 300,0,-70, true, -1);
+//        orcjump1.play();
+
     }
 
 }

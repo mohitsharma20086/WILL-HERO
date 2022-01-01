@@ -10,4 +10,6 @@ public abstract class Gameobject {
     public abstract void jump();
     public abstract ImageView getImage();
     public abstract void oncollide(Gameobject g);
+
+    public abstract void remove(AnchorPane mainpane);
 }

@@ -8,14 +8,10 @@ import javafx.scene.layout.AnchorPane;
 import java.io.File;
 
 public class Weapon {
-    private ImageView weapon;
+    protected ImageView weapon;
 
     public Weapon(){
-        weapon = new ImageView();
-        weapon.setImage(new Image((new File("src/main/resources/ChestClosed.png")).toURI().toString()));
-        weapon.setFitHeight(55);
-        weapon.setFitWidth(70);
-        weapon.setY(375);
+
     }
 
     public void display(AnchorPane mainpane){

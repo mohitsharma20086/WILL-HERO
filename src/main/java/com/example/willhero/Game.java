@@ -1,7 +1,9 @@
 package com.example.willhero;
 
+import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Game extends Application implements Serializable{
     private Stage greeting_stage;
@@ -193,3 +196,58 @@ public class Game extends Application implements Serializable{
 //        thread3.start();
 //        thread2.start();
 ////           thread4.start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    AnimationTimer collplatform  = new AnimationTimer() {
+//        @Override
+//        public void handle(long l) {
+//            boolean flagcool = false;
+//            for(int i = 0; i< platform.size(); i++){
+//                if(hero.getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
+//                    flagonplatform = true;
+//                    herojump.play();
+//                    System.out.println("in here");
+//                    return;
+//                }
+//            }
+//            flagexit = true;
+//            TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
+//            translate1.setCycleCount(1);
+//            translate1.setToY(300);
+//            translate1.setAutoReverse(false);
+//            translate1.play();
+//        }
+//    };
+
+
+//    public void setPlatform(ArrayList p){
+//        this.platform = p;
+//        System.out.println(platform);
+//    }

@@ -30,9 +30,10 @@ public class Chest extends Gameobject{
 
     public void oncollide(Gameobject g){
         if(g instanceof Hero){
+            chest.setImage(null);
             chest.setImage(new Image((new File("src/main/resources/ChestOpen.png")).toURI().toString()));
             if((int)(Math.random()*3) == 1){
-
+                ((Hero)g).addweapon((int)(Math.random()));
             }
             else{
                 ((Hero)g).addcoin(5);
@@ -40,10 +41,7 @@ public class Chest extends Gameobject{
         }
         else{
             TranslateTransition movefor = Animations.translateTransition(chest, 100, 70, 0, false, 1);
-            TranslateTransition translate = new TranslateTransition(Duration.millis(300),chest);
-            translate.setCycleCount(1);
-            translate.setToY(3);
-            translate.setAutoReverse(false);
+            movefor.play();
         }
     }
 
@@ -56,4 +54,8 @@ public class Chest extends Gameobject{
         return chest;
     }
 
+    @Override
+    public void remove(AnchorPane mainpane) {
+            mainpane.getChildren().remove(chest);
+    }
 }

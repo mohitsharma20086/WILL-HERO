@@ -104,7 +104,7 @@ public class GameController implements Initializable {
 
     private ArrayList<Cloud> clouds = new ArrayList<Cloud>();
     private ArrayList<Platform> platform = new ArrayList<Platform>();
-    private ArrayList<Gameobject> orcs = new ArrayList<Gameobject>();
+    private ArrayList<Gameobject> gameobjects = new ArrayList<Gameobject>();
 
     private ArrayList<TranslateTransition> moveplatforms = new ArrayList<TranslateTransition>();
     private ArrayList<TranslateTransition> moveorcs = new ArrayList<TranslateTransition>();
@@ -144,6 +144,7 @@ public class GameController implements Initializable {
         clouds.get(5).moveetoe(rootmain);
         AtomicInteger count = new AtomicInteger(7);
         Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
+            pause_gamebutton.toFront();
             clouds.get(count.get()).moveetoe(rootmain);
             count.getAndIncrement();
             if(count.get() > 12)count.set(0);
@@ -160,7 +161,7 @@ public class GameController implements Initializable {
 
     public void removeplatforms(){
         Platform.setplatform_id(0);Platform.setplatform_id(0);
-        for(int i = 12; i >= 0; i--){
+        for(int i = platform.size() -1; i >= 0; i--){
             platform.get(i).remove(rootmain);
             platform.remove(i);
         }
@@ -173,7 +174,9 @@ public class GameController implements Initializable {
         Platform p1 = new Platform(rootmain, 0);
         platform.add(p1);
         platform.get(0).setPlatformx(c+r);
+        hero.addplatformd(c+r,p1.getplatformw(0));
         c += platform.get(0).getPlatform().getFitWidth()+ 40;
+
         r = (int)(Math.random()*120+60);
         platform.get(0).display(rootmain);
 
@@ -181,45 +184,54 @@ public class GameController implements Initializable {
             Platform p = new Platform(rootmain);
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
+            hero.addplatformd(c+r,p.getplatformw(i));
             c += platform.get(i).getPlatform().getFitWidth()+ 140;
             r = (int)(Math.random()*120+100);
             platform.get(i).display(rootmain);
         }
+
+//        hero.setPlatform(platform);
     }
 
-    public void generateorcs(){
+    public void removegameobj(){
+        for(int i = gameobjects.size() -1; i >= 0; i--){
+            gameobjects.get(i).remove(rootmain);
+            gameobjects.remove(i);
+        }
+    }
+    public void generategameobj(){
         for(int i = 1; i< platform.size(); i++){
             if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2) {
                     Chest c = new Chest();
                     System.out.println("In here");
                     c.setX(platform.get(i).getPlatform().getX() + 120);
-                    orcs.add(c);
+                    gameobjects.add(c);
                 }
                 else{
                     Orc o = new Orc();
                     o.setX(platform.get(i).getPlatform().getX()+70);
-                    orcs.add(o);
+                    gameobjects.add(o);
                     for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++) {
                         if ((int)(Math.random() * 10) == 2) {
                             Chest c = new Chest();
                             System.out.println("In here");
                             c.setX(platform.get(i).getPlatform().getX() + 120 * (j+1));
-                            orcs.add(c);
+                            gameobjects.add(c);
                         }
                         else{
                             Orc o1 = new Orc();
                             o1.setX(platform.get(i).getPlatform().getX() + 120 * (j + 1));
-                            orcs.add(o1);
+                            gameobjects.add(o1);
                         }
                     }
                 }
 
             }
         }
-        for(int i = 1; i< orcs.size(); i++){
-            orcs.get(i).display(rootmain);
-            orcs.get(i).jump();
+        for(int i = 1; i< gameobjects.size(); i++){
+            gameobjects.get(i).display(rootmain);
+            gameobjects.get(i).jump();
         }
     }
 
@@ -232,16 +244,16 @@ public class GameController implements Initializable {
         hero.jump();
         moveclouds();
         generateplatforms();
-        generateorcs();
+        generategameobj();
         Animations.translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         Animations.translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
         exitgame.start();
 
         for(int i = 0; i< platform.size(); i++){
-            moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
+            moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 100, -200, 0, false, 1));
         }
-        for(int i = 0; i< orcs.size(); i++){
-            moveorcs.add(Animations.translateTransition(orcs.get(i).getImage(), 300, -150, 0, false, 1));
+        for(int i = 0; i< gameobjects.size(); i++){
+            moveorcs.add(Animations.translateTransition(gameobjects.get(i).getImage(), 100, -200, 0, false, 1));
         }
 }
 
@@ -437,9 +449,9 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             boolean flagcool = false;
-            for(int i = 0; i< orcs.size(); i++){
-                if(hero.getImage().getBoundsInParent().intersects(orcs.get(i).getImage().getBoundsInParent()) == true ){
-                    orcs.get(i).oncollide(hero);
+            for(int i = 0; i< gameobjects.size(); i++){
+                if(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
+                    gameobjects.get(i).oncollide(hero);
                     return;
                 }
             }
@@ -475,6 +487,8 @@ public class GameController implements Initializable {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         removeplatforms();
         generateplatforms();
+        removegameobj();
+        generategameobj();
         displaygame(stage);
     }
 
@@ -548,7 +562,6 @@ public class GameController implements Initializable {
            thread3.start();
            thread2.start();
            thread4.start();
-//           thread3.join();
 
 //           try {
 //               Thread.sleep(300);
@@ -565,10 +578,10 @@ public class GameController implements Initializable {
 //                   moveorcsback.remove(i);
 //               }
 //               for (int i = 0; i < platform.size(); i++) {
-//                   moveplatformsback.add(Animations.translateTransition(platform.get(i).getPlatform(), 3000, temp, 0, false, 1));
+//                   moveplatformsback.add(Animations.translateTransition(platform.get(i).getPlatform(), 2000, temp, 0, false, 1));
 //               }
-//               for (int i = 0; i < orcs.size(); i++) {
-//                   moveorcsback.add(Animations.translateTransition(orcs.get(i).getOrc(), 3000, temp, 0, false, 1));
+//               for (int i = 0; i < gameobjects.size(); i++) {
+//                   moveorcsback.add(Animations.translateTransition(gameobjects.get(i).getImage(), 2000, temp, 0, false, 1));
 //               }
 //               for (int i = 0; i < moveplatformsback.size(); i++) {
 //                   moveplatformsback.get(i).play();
