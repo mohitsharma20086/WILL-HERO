@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Hero extends Gameobject {
-    private int coin_collected =  0;
+    private int coin_collected = 0;
     private Weapon[] w = new Weapon[2];
     private Weapon currentweapon = null;
 
@@ -59,7 +59,6 @@ public class Hero extends Gameobject {
             else {
                 w[i] = new Throwing_knives(this);
             }
-            System.out.println("In create ");
             if(currentweapon != null)currentweapon.remove(rootmain);
             currentweapon = w[i];
             if(currentweapon != null)currentweapon.display(rootmain);
@@ -119,8 +118,8 @@ public class Hero extends Gameobject {
                 Double t = hero.getX();
                 int f = -1;
                 for(int i = currentplatform; i < platformstarts.size();i++) {
-                    System.out.println("start " +(platformstarts.get(i) - spacecount*(200))+ " " +t);
-                    System.out.println("size " + (platformstarts.get(i) -spacecount*(200) + platformsize.get(i))+ " " +t);
+//                    System.out.println("start " +(platformstarts.get(i) - spacecount*(200))+ " " +t);
+//                    System.out.println("size " + (platformstarts.get(i) -spacecount*(200) + platformsize.get(i))+ " " +t);
                     if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
                         if (Double.compare((platformstarts.get(i) -spacecount*(200) + platformsize.get(i)), t) > 30) {
                             System.out.println("on platform  "+(i));
@@ -164,7 +163,6 @@ public class Hero extends Gameobject {
     }
 
     public void setAnother_space() {
-//        System.out.println("In set space");
         another_space1 = true;
         this.another_space.set(true);
         spacecount++;

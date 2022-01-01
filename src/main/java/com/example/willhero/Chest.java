@@ -23,6 +23,7 @@ public class Chest extends Gameobject{
 
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(chest);
+        chest.toFront();
     }
 
     public void setX(double x){
@@ -30,35 +31,35 @@ public class Chest extends Gameobject{
     }
 
     public void oncollide(Gameobject g){
+        if(opened == false){
         if(g instanceof Hero ){
-            if(opened == false){
                 chest.setImage(null);
                 chest.setImage(new Image((new File("src/main/resources/ChestOpen.png")).toURI().toString()));
-//                if((int)(Math.random()*3) == 1){
+                if((int)(Math.random()*3) == 1){
                     ((Hero)g).addweapon((int)(Math.random()*2));
-                ((Hero)g).addweapon(1);
-//                }
-//                else{
-//                    ((Hero)g).addcoin(5);
-//                }
+//                ((Hero)g).addweapon(0);
+                }
+                else{
+                    ((Hero)g).addcoin(5);
+                }
                 opened = true;
             }
-        }
         else if(g instanceof Weapon){
             chest.setImage(null);
             chest.setImage(new Image((new File("src/main/resources/ChestOpen.png")).toURI().toString()));
-//                if((int)(Math.random()*3) == 1){
-//            ((Weapon) g).getHero().addweapon((int)(Math.random()*2));
-            ((Weapon) g).getHero().addweapon(1);
-//                }
-//                else{
-//                    ((Weapon) g).getHero().addcoin(5);
-//                }
+                if((int)(Math.random()*3) == 1){
+            ((Weapon) g).getHero().addweapon((int)(Math.random()*2));
+//            ((Weapon) g).getHero().addweapon(0);
+                }
+                else{
+                    ((Weapon) g).getHero().addcoin(5);
+                }
             opened = true;
         }
         else{
             TranslateTransition movefor = Animations.translateTransition(chest, 100, 70, 0, false, 1);
             movefor.play();
+        }
         }
     }
 
