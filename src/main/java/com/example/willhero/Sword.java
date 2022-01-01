@@ -7,6 +7,6 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.File;
 
-public class Sword {
+public class Sword extends Weapon{
 
 }

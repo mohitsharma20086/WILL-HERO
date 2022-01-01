@@ -178,7 +178,10 @@ public class Hero extends Gameobject {
     }
 
     public void addweapon(int i){
-
+        if(w[i] == null){
+            if(i == 0)w[i] = new Sword();
+            else w[i] = new Throwing_knives();
+        }
     }
 
     public void setcurrentweapon(int i){

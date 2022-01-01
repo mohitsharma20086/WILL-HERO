@@ -8,7 +8,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Throwing_knives {
+public class Throwing_knives extends Weapon {
     private ImageView knives;
 
     private boolean flagonplatform = true;
