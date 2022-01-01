@@ -9,7 +9,7 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Orc {
+public class Orc extends Gameobject{
     private TranslateTransition orcjump;
     private TranslateTransition translate1;
     private ImageView orc;
@@ -29,7 +29,7 @@ public class Orc {
         mainpane.getChildren().add(orc);
     }
 
-    public void jumporc(){
+    public void jump(){
         orcjump = Animations.translateTransition(orc, 300,0,-70, true, -1);
         orcjump.play();
     }
@@ -81,7 +81,7 @@ public class Orc {
         });
     }
 
-    public ImageView getOrc(){
+    public ImageView getImage(){
         return orc;
     }
 
@@ -97,8 +97,8 @@ public class Orc {
         flagonplatform = f;
     }
 
-    public void oncollide(Hero hero){
-        System.out.println("here");
+    public void oncollide(Gameobject hero){
+//        System.out.println("here");
     }
 
 }

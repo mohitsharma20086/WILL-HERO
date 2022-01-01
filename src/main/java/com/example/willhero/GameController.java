@@ -26,6 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameController implements Initializable {
 
+    static GameController g = new GameController();
+
     private Hero hero;
 
     @FXML
@@ -102,7 +104,7 @@ public class GameController implements Initializable {
 
     private ArrayList<Cloud> clouds = new ArrayList<Cloud>();
     private ArrayList<Platform> platform = new ArrayList<Platform>();
-    private ArrayList<Orc> orcs = new ArrayList<Orc>();
+    private ArrayList<Gameobject> orcs = new ArrayList<Gameobject>();
 
     private ArrayList<TranslateTransition> moveplatforms = new ArrayList<TranslateTransition>();
     private ArrayList<TranslateTransition> moveorcs = new ArrayList<TranslateTransition>();
@@ -186,28 +188,38 @@ public class GameController implements Initializable {
     }
 
     public void generateorcs(){
-        int count = 0;
         for(int i = 1; i< platform.size(); i++){
             if(platform.get(i).getPlatform().getFitWidth() >= 300){
-                for(int j = 0; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++){
-                    Orc o = new Orc();
-                    o.setX(platform.get(i).getPlatform().getX()+Math.random()*platform.get(i).getPlatform().getFitWidth());
-                    orcs.add(o);
-                    count++;
+                if ((int)(Math.random() * 8) == 2) {
+                    Chest c = new Chest();
+                    System.out.println("In here");
+                    c.setX(platform.get(i).getPlatform().getX() + 120);
+                    orcs.add(c);
                 }
-            }
-            else{
-                Orc o = new Orc();
-                o.setX(platform.get(i).getPlatform().getX());
-                orcs.add(o);
-//                System.out.println("in here  "+ platform.get(i).getPlatform().getX()+"  " +count);
-                count++;
-            }
+                else{
+                    Orc o = new Orc();
+                    o.setX(platform.get(i).getPlatform().getX()+70);
+                    orcs.add(o);
+                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/200 +1; j++) {
+                        if ((int)(Math.random() * 10) == 2) {
+                            Chest c = new Chest();
+                            System.out.println("In here");
+                            c.setX(platform.get(i).getPlatform().getX() + 120 * (j+1));
+                            orcs.add(c);
+                        }
+                        else{
+                            Orc o1 = new Orc();
+                            o1.setX(platform.get(i).getPlatform().getX() + 120 * (j + 1));
+                            orcs.add(o1);
+                        }
+                    }
+                }
 
+            }
         }
         for(int i = 1; i< orcs.size(); i++){
             orcs.get(i).display(rootmain);
-            orcs.get(i).jumporc();
+            orcs.get(i).jump();
         }
     }
 
@@ -217,7 +229,7 @@ public class GameController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         System.out.println("IN game");
         hero = new Hero(rootmain);
-        hero.jumphero();
+        hero.jump();
         moveclouds();
         generateplatforms();
         generateorcs();
@@ -229,7 +241,7 @@ public class GameController implements Initializable {
             moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
         }
         for(int i = 0; i< orcs.size(); i++){
-            moveorcs.add(Animations.translateTransition(orcs.get(i).getOrc(), 300, -150, 0, false, 1));
+            moveorcs.add(Animations.translateTransition(orcs.get(i).getImage(), 300, -150, 0, false, 1));
         }
 }
 
@@ -403,12 +415,16 @@ public class GameController implements Initializable {
 //        return false;
 //    }
 
+    public static void checkcoll(){
+        g.collplatform.start();
+    }
+
     AnimationTimer collplatform  = new AnimationTimer() {
         @Override
         public void handle(long l) {
             boolean flagcool = false;
             for(int i = 0; i< 13; i++){
-                if(hero.getHero().getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
+                if(hero.getImage().getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
                     hero.setonplatform(true);
                     falg_col = true;
                     return;
@@ -422,7 +438,7 @@ public class GameController implements Initializable {
         public void handle(long l) {
             boolean flagcool = false;
             for(int i = 0; i< orcs.size(); i++){
-                if(hero.getHero().getBoundsInParent().intersects(orcs.get(i).getOrc().getBoundsInParent()) == true ){
+                if(hero.getImage().getBoundsInParent().intersects(orcs.get(i).getImage().getBoundsInParent()) == true ){
                     orcs.get(i).oncollide(hero);
                     return;
                 }
@@ -518,8 +534,6 @@ public class GameController implements Initializable {
                    }
                }
            };
-
-
 
            Thread thread3 = new Thread(){
                @Override
