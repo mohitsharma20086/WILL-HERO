@@ -1,33 +1,18 @@
 package com.example.willhero;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-
-
 
 public class Game extends Application implements Serializable{
     private Stage greeting_stage;
@@ -107,3 +92,104 @@ public class Game extends Application implements Serializable{
 //    }
 
 
+
+//           moveorcs.get(moveorcs.size()-1).setOnFinished(e->
+//           {
+//               double temp = -hero.getHero().getX() + 320;
+//               for (int i = 0; i < moveplatformsback.size(); i++) {
+//                   moveplatformsback.remove(i);
+//               }
+//               for (int i = 0; i < moveorcsback.size(); i++) {
+//                   moveorcsback.remove(i);
+//               }
+//               for (int i = 0; i < platform.size(); i++) {
+//                   moveplatformsback.add(Animations.translateTransition(platform.get(i).getPlatform(), 3000, temp, 0, false, 1));
+//               }
+//               for (int i = 0; i < orcs.size(); i++) {
+//                   moveorcsback.add(Animations.translateTransition(orcs.get(i).getOrc(), 3000, temp, 0, false, 1));
+//               }
+//               for (int i = 0; i < moveplatformsback.size(); i++) {
+//                   moveplatformsback.get(i).play();
+//               }
+//               for (int i = 0; i < moveorcsback.size(); i++) {
+//                   moveorcsback.get(i).play();
+//               }
+//           });
+
+
+
+//for (int i = 0; i < moveplatformsback.size(); i++) {
+//        moveplatformsback.get(i).stop();
+//        }
+//        for (int i = 0; i < moveorcsback.size(); i++) {
+//        moveorcsback.get(i).stop();
+//        }
+
+//
+//coll.stop();
+//        hero.setAnother_space();
+//        System.out.println("was in space");
+////           Thread thread1 = new Thread() {
+////               @Override
+////               public void run() {
+////
+////               }
+////           };
+//        hero.moveforward();
+//
+//        Thread thread2 = new Thread(){
+//@Override
+//public void run(){
+////                   coll.start();
+////                   if(falg_col) {
+////                   hero.getHero().getBoundsInParent().intersects(platform.get(0).getPlatform().getBoundsInParent());
+////                   }
+//        }
+//        };
+//
+//        Thread thread3 = new Thread(){
+//@Override
+//public void run(){
+//        for(int i = 0; i< moveplatforms.size(); i++){
+//        moveplatforms.get(i).play();
+//        }
+//        for(int i = 0; i< moveorcs.size(); i++){
+//        moveorcs.get(i).play();
+//        }
+//        coll.start();
+////                for(int i = 0; i< 13; i++){
+////                    moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 300, -150, 0, false, 1));
+////                }
+////                for(int i = 0; i< 13; i++){
+////                    moveplatforms.get(i).play();
+////                }
+////                for(int i = 0; i< orcs.size(); i++){
+////                    moveorcsback.add(Animations.translateTransition(orcs.get(i).getOrc(), 300, -150, 0, false, 1));
+////                }
+////                for(int i = 0; i< orcs.size(); i++){
+////                    moveorcs.get(i).play();
+////                }
+//        }
+//        };
+////
+////       Thread thread4 = new Thread(){
+////           @Override
+////           public void run(){
+////
+////           }
+////       };
+//
+//        double temp = hero.getHero().getX() - 320;
+//
+//
+//        for(int i = 0; i< platform.size(); i++){
+//        moveplatforms.get(i).play();
+//        }
+//        for(int i = 0; i< orcs.size(); i++){
+//        moveorcs.get(i).play();
+//        }
+//
+////           thread1.start();
+//        thread3.start();
+//        thread2.start();
+////           thread4.start

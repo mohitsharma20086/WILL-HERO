@@ -131,10 +131,9 @@ public class Hero {
 
 
 
-
+//store platform in an arraylist and then do with thw list
 package com.example.willhero;
 
-import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -144,18 +143,21 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Hero {
+public class Hero extends Gameobject {
+    private int coin_collected =  0;
+    private Weapon[] w = new Weapon[2];
+    private Weapon currentweapon = null;
+
     private TranslateTransition herojump;
-    private TranslateTransition translate1;
+//    private TranslateTransition translate1;
     private ImageView hero;
 
     private boolean flagonplatform = true;
     private AtomicBoolean another_space = new AtomicBoolean(false);
     private boolean flagexit = false;
+    private boolean another_space1 = false;
+    private int spacecount = 0;
 
-
-//    private TranslateTransition moveup;
-//    private TranslateTransition movedown;
 
     Hero(AnchorPane mainpane){
         hero = new ImageView();
@@ -165,70 +167,79 @@ public class Hero {
         hero.setY(386);
         hero.setX(320);
         mainpane.getChildren().add(hero);
-//
-//        moveup = Animations.translateTransitionmovetoY(hero,300, 0 , -55, false, 1);
-//        movedown = Animations.translateTransitionmovetoY(hero,600, 0 , 110, false, 1);
-//        moveup.setOnFinished(e -> {
-//            movedown.play();
-//        });
     }
 
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(hero);
     }
 
-    public void jumphero(){
+    public void addcoin(int x){
+        coin_collected += x;
+    }
+
+    public void addweapon(int i){
+
+    }
+
+    public void setcurrentweapon(int i){
+
+    }
+
+    public void jump(){
         herojump = Animations.translateTransition(hero, 300,0,-70, true, -1);
-//        herojump.setOnFinished(e ->{
-//            if(flagonplatform == false){
-//                System.out.println("gone");
-//            }
-//            else herojump.play();
-//        });
         herojump.play();
     }
 
     public void moveforward(){
+//        another_space1 = false;
         flagonplatform = false;
         herojump.stop();
-        another_space.set(false);
+//        another_space.set(false);
+
+//        System.out.println("before move   "+flagonplatform+"   "+another_space1 +"   "+another_space.get()+"  "+ spacecount);
         TranslateTransition movefor = Animations.translateTransition(hero, 100, 70, 0, false, 1);
         TranslateTransition translate = new TranslateTransition(Duration.millis(300),hero);
         translate.setCycleCount(1);
         translate.setToY(3);
         translate.setAutoReverse(false);
-//        ak:
+        movefor.setOnFinished(e -> {
+//            another_space.set(false);
+//            another_space1 = false;
+            spacecount--;
+            another_space1 = false;
+            another_space.set(false);
+            TranslateTransition translateup = new TranslateTransition(Duration.millis(60), hero);
+            translateup.setCycleCount(1);
+            translateup.setByY(-50);
+            translateup.setAutoReverse(false);
+            translateup.play();
+
+            translate.play();
+        });
         movefor.play();
-        try {
-            Thread.sleep(120);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(120);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//
+////            System.out.println("in here");
+////        if(another_space.get() == true) {
+////           if(spacecount > 0){
+////                spacecount--;
+////                System.out.println("in here here");
 
-//        movefor.setOnFinished(e ->{
-//            System.out.println("in here");
-//            if(another_space.get() == true) {
-//                System.out.println("in here here");
-//                TranslateTransition translate1 = new TranslateTransition(Duration.millis(300), hero);
-//                translate1.setCycleCount(1);
-//                translate1.setByY(5);
-//                translate1.setAutoReverse(false);
-//                translate1.play();
-//                another_space.set(false);
-//                movefor.play();
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e1) {
-//                    e1.printStackTrace();
-//                }
-////                translate.play();
-//            }
-//            });
 
-        translate.play();
         translate.setOnFinished(e -> {
-            System.out.println(flagonplatform);
-            if(flagonplatform == false){
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
+
+//            System.out.println("after move   "+flagonplatform+"   "+another_space1 +"   "+another_space.get()+"  "+ spacecount);
+            if(flagonplatform == false ){
                 flagexit = true;
                 TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
                 translate1.setCycleCount(1);
@@ -236,13 +247,17 @@ public class Hero {
                 translate1.setAutoReverse(false);
                 translate1.play();
             }
-            else {
-                herojump.play();
+//            else if(another_space.get() == true) {
+//                movefor.play();
+//            }
+                else{
+                    herojump.play();
+
             }
         });
     }
 
-    public ImageView getHero(){
+    public ImageView getImage(){
         return hero;
     }
 
@@ -256,6 +271,20 @@ public class Hero {
     }
 
     public void setAnother_space() {
+        System.out.println("In set space");
+        another_space1 = true;
         this.another_space.set(true);
+        spacecount++;
     }
+
+    public void moveback(){
+        Animations.translateTransition(hero, 3000, -70, 0, false, 1).play();
+    }
+
+
+    public void oncollide(Gameobject g){
+
+    }
+
+
 }

@@ -70,8 +70,6 @@ public class Platform{
         platform_id++;
         platform.setX(400);
         platform.setY(435);
-
-        System.out.println(r);
     }
 
     Platform(AnchorPane mainpane){

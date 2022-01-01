@@ -9,14 +9,13 @@ import javafx.util.Duration;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Orc {
-    private TranslateTransition herojump;
+public class Orc extends Gameobject{
+    private TranslateTransition orcjump;
     private TranslateTransition translate1;
     private ImageView orc;
 
     private boolean flagonplatform = true;
     private AtomicBoolean flagonplatform1 = new AtomicBoolean(true);
-
 
     Orc(){
         orc = new ImageView();
@@ -30,20 +29,19 @@ public class Orc {
         mainpane.getChildren().add(orc);
     }
 
-    public void jumphero(){
-        herojump = Animations.translateTransition(orc, 300,0,-70, true, -1);
-//        herojump.setOnFinished(e ->{
-//            if(flagonplatform == false){
-//                System.out.println("gone");
-//            }
-//            else herojump.play();
-//        });
-        herojump.play();
+    public void jump(){
+        orcjump = Animations.translateTransition(orc, 300,0,-70, true, -1);
+        orcjump.play();
+    }
+
+
+    public void setX(double x){
+        orc.setX(x);
     }
 
     public void moveforward(){
         flagonplatform = false;
-        herojump.stop();
+        orcjump.stop();
         TranslateTransition movefor = Animations.translateTransition(orc, 100, 70, 0, false, 1);
         TranslateTransition translate = new TranslateTransition(Duration.millis(300),orc);
         translate.setCycleCount(1);
@@ -77,13 +75,13 @@ public class Orc {
                 translate1.play();
             }
             else {
-                herojump.play();
+                orcjump.play();
             }
 //            herojump.play();
         });
     }
 
-    public ImageView getHero(){
+    public ImageView getImage(){
         return orc;
     }
 
@@ -97,6 +95,10 @@ public class Orc {
 
     public void setonplatform(boolean f){
         flagonplatform = f;
+    }
+
+    public void oncollide(Gameobject hero){
+//        System.out.println("here");
     }
 
 }
