@@ -65,9 +65,14 @@ public class RedOrc extends Orc{
         if (lastspacecount != temp) {
             lastspacecount = temp;
             orcjump.stop();
-
-            if (g instanceof Weapon) health--;
-            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) health--;
+            if (g instanceof Weapon) {
+                health--;
+                ((Weapon) g).getHero().addcoin(1);
+            }
+            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) {
+                health--;
+                ((Hero) g).addcoin(1);
+            }
             orcjump.stop();
             TranslateTransition translate1 = new TranslateTransition(Duration.millis(100), redorc);
             translate1.setCycleCount(1);
@@ -89,10 +94,6 @@ public class RedOrc extends Orc{
                     translate2.play();
                     translate2.setOnFinished(e -> {
                         redorc.setImage(null);
-                        if(g instanceof Hero)((Hero) g).addcoin(5);
-                        else if(g instanceof Weapon){
-                            ((Weapon) g).getHero().addcoin(5);
-                        }
                     });
 
                 } else {

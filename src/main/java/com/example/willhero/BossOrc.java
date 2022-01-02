@@ -60,8 +60,14 @@ public class BossOrc extends Orc{
         if (lastspacecount != temp) {
             lastspacecount = temp;
             orcjump.stop();
-            if (g instanceof Weapon) health--;
-            else if(g instanceof Hero && ((Hero) g).getCurrentweapon() != null)health--;
+            if (g instanceof Weapon) {
+                health--;
+                ((Weapon) g).getHero().addcoin(1);
+            }
+            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) {
+                health--;
+                ((Hero) g).addcoin(1);
+            }
             TranslateTransition translate1 = new TranslateTransition(Duration.millis(100), bossorc);
             translate1.setCycleCount(1);
             translate1.setByX(60);

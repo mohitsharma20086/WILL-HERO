@@ -245,7 +245,7 @@ public class Hero extends Gameobject {
                 }
             }
         }
-        return 1;
+        return -1;
     }
 
     public void setXY(){
@@ -258,5 +258,15 @@ public class Hero extends Gameobject {
         translate1.play();
         if(currentweapon != null)currentweapon.resurrect();
 //        TranslateTransition new = TranslateTransition()
+    }
+
+    public void fall(){
+        flagexit = true;
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
+        translate1.setCycleCount(1);
+        translate1.setToY(300);
+        translate1.setAutoReverse(false);
+        translate1.play();
+        if(currentweapon != null)currentweapon.fallwithhero();
     }
 }

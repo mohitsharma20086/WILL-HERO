@@ -139,7 +139,9 @@ public class GameController implements Initializable, Serializable {
     private ArrayList<TranslateTransition> moveplatformsback = new ArrayList<TranslateTransition>();
     private ArrayList<TranslateTransition> moveorcsback = new ArrayList<TranslateTransition>();
 
+    public void loadhighscosre(){
 
+    }
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
         root = FXMLLoader.load(getClass().getResource("game.fxml"));
@@ -169,20 +171,26 @@ public class GameController implements Initializable, Serializable {
 
         clouds.get(6).moveetoe(rootmain);
         clouds.get(5).moveetoe(rootmain);
-        pause_gamebutton.toFront();
-        coin_logo.toFront();
-        AtomicInteger count = new AtomicInteger(7);
-        Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
+        if(!onscreen) {
             pause_gamebutton.toFront();
             coin_logo.toFront();
+            setting_logo.toFront();
+        }
+        AtomicInteger count = new AtomicInteger(7);
+        Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
+
             clouds.get(count.get()).moveetoe(rootmain);
             count.getAndIncrement();
             if(count.get() > 12)count.set(0);
-            pause_gamebutton.toFront();
-            tap_icon.toFront();
-            will_hero_name.toFront();
-            Cursor_icon.toFront();
-            setting_logo.toFront();
+            if(!onscreen) {
+                pause_gamebutton.toFront();
+                tap_icon.toFront();
+                will_hero_name.toFront();
+                Cursor_icon.toFront();
+                setting_logo.toFront();
+                pause_gamebutton.toFront();
+                coin_logo.toFront();
+            }
         }));
         t.setCycleCount(Animation.INDEFINITE);
         t.play();
@@ -263,9 +271,7 @@ public class GameController implements Initializable, Serializable {
         }
     }
     public void generategameobj(){
-//        RedOrc or = new RedOrc();
-//        gameobjects.add(or);
-//        gameobjects.get(0).display(rootmain);
+        gameobjects.get(0).display(rootmain);
         for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2 && platform.get(i).getImage().getFitWidth() >= 380) {
@@ -279,8 +285,14 @@ public class GameController implements Initializable, Serializable {
                         c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
                         gameobjects.add(c);
                     }
-                    if((int)(Math.random()*5) == 1) {
+                    int t = (int)(Math.random()*7);
+                    if(t == 1) {
                         RedOrc o = new RedOrc();
+                        o.setX(platform.get(i).getImage().getX() + 50);
+                        gameobjects.add(o);
+                    }
+                    else if(t == 2){
+                        Tnt o = new Tnt();
                         o.setX(platform.get(i).getImage().getX() + 50);
                         gameobjects.add(o);
                     }
@@ -607,19 +619,29 @@ public class GameController implements Initializable, Serializable {
             onscreen = false;
             exitgame.start();
             hero.addcoin(-20);
+            double temp1 = 0;
             for(int i = 1; i < platform.size(); i++){
 //                System.out.println(platform.get(i-1).getImage().getX()+" "+hero.getImage().getX());
                 if((platform.get(i).getImage().getX()- hero.getSpacecount()*(200)) >= hero.getImage().getX()){
-                    System.out.println(i-1);
+                    temp = i-1;
+                    temp1 = -(platform.get(i-1).getImage().getX()- hero.getSpacecount()*(200)) + hero.getImage().getX();
                     break;
                 }
             }
-            for (int i = 0; i < moveplatformsback.size(); i++) {
-                moveplatformsback.get(i).play();
+//            System.out.println(temp+"  "+temp1);
+
+            for(int i = 0; i< platform.size(); i++){
+                Animations.translateTransition(platform.get(i).getImage(), 10, temp1, 0, false, 1).play();
             }
-            for (int i = 0; i < moveorcsback.size(); i++) {
-                moveorcsback.get(i).play();
+            for(int i = 0; i< gameobjects.size(); i++){
+                Animations.translateTransition(gameobjects.get(i).getImage(), 10, temp1, 0, false, 1).play();
             }
+//            for (int i = 0; i < moveplatformsback.size(); i++) {
+//                moveplatformsres.get(i).play();
+//            }
+//            for (int i = 0; i < moveorcsback.size(); i++) {
+//                moveorcsres.get(i).play();
+//            }
         }
 
     }

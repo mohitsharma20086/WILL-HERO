@@ -62,8 +62,16 @@ public class NormalOrc extends Orc{
             temp = ((Hero) g).getSpacecount();
         if (lastspacecount != temp) {
             lastspacecount = temp;
-            if (g instanceof Weapon) health--;
-            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) health--;
+            if(flaghit = false){
+                ((Weapon) g).getHero().addcoin(1);
+                flaghit = true;
+            }
+            if (g instanceof Weapon) {
+                health--;
+            }
+            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) {
+                health--;
+            }
             orcjump.stop();
             TranslateTransition translate1 = new TranslateTransition(Duration.millis(100), normalorc);
             translate1.setCycleCount(1);

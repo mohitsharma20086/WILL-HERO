@@ -11,7 +11,6 @@ import java.io.File;
 public class Coin extends Gameobject{
     private ImageView coin;
     private TranslateTransition coinjump;
-    private GameController gameController=new GameController();
     private boolean correct=true;
 
     public Coin(){
@@ -22,7 +21,7 @@ public class Coin extends Gameobject{
         coin.setY(380);
         coin.toFront();
     }
-
+    @Override
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(coin);
     }
@@ -30,7 +29,7 @@ public class Coin extends Gameobject{
     public void setX(double x){
         coin.setX(x);
     }
-
+    @Override
     public void oncollide(Gameobject g){
         if(correct==true && coin.getImage() != null){
             correct=false;
@@ -51,11 +50,12 @@ public class Coin extends Gameobject{
         }
     }
 
+    @Override
     public void jump(){
         coinjump = Animations.translateTransition(coin, 300,0,-5, true, -1);
         coinjump.play();
     }
-
+    @Override
     public ImageView getImage(){
         return coin;
     }
