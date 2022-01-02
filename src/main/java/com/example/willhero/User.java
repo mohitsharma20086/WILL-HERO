@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String name;
     private int currentScore;
     private int highScore;
@@ -26,7 +27,17 @@ public class User implements Serializable {
     }
 
     public String getName() {return this.name;}
-    public int getCurrentscore() {
+    public int getCoincollected() {
+        return coincollected;
+    }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public int getCurrentScore() {
         return currentScore;
     }
+
+
 }

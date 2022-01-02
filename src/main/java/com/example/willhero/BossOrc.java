@@ -1,6 +1,9 @@
 package com.example.willhero;
 // orc hit with weapon
+import javafx.animation.AnimationTimer;
 import javafx.animation.TranslateTransition;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -15,6 +18,8 @@ public class BossOrc extends Orc{
     private TranslateTransition translate1;
     private ImageView bossorc;
     private double health = 1;
+    private Group won_popup;
+    private AnchorPane pane;
 
     BossOrc(){
         super(5);
@@ -26,6 +31,11 @@ public class BossOrc extends Orc{
         bossorc.setX(500);
     }
 
+    public void setwonpopup(Group w, AnchorPane p){
+        won_popup = w;
+        pane = p;
+        bossorcdied.start();
+    }
 
     @Override
     public void display(AnchorPane mainpane){
@@ -49,7 +59,7 @@ public class BossOrc extends Orc{
     @Override
     public void jump(){
         orcjump = Animations.translateTransition(bossorc, 300,0,-90, true, -1);
-//        orcjump.play();
+        orcjump.play();
     }
 
     @Override
@@ -131,4 +141,18 @@ public class BossOrc extends Orc{
             });
         }
     }
+
+    AnimationTimer bossorcdied  = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            if(health <= 0){
+                won_popup.toFront();
+                TranslateTransition translate = new TranslateTransition(Duration.millis(400), won_popup);
+                translate.setToX(-(pane.getPrefWidth() + ((Node) won_popup).getBoundsInLocal().getWidth()) / 2);
+                translate.play();
+                bossorcdied.stop();
+            }
+        }
+    };
+
 }

@@ -20,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
 import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameController implements Initializable, Serializable {
+    private static final long serialVersionUID = 2L;
 
     public void Serialize() throws IOException {
         ObjectOutputStream out = null;
@@ -36,24 +38,67 @@ public class GameController implements Initializable, Serializable {
             for (Gameobject gameObject : gameobjects) {
                 out.writeObject(gameObject);
             }
-            //a b c
-            //a b c
-
-            //gameobject
-            //hero - alag file
-            // platform
-            // user
         }finally {
-            assert out != null;
+             if(out != null)
             out.close();
+        }
+    }
+
+    public void Serializecuser() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            File file = new File("src/main/resources/userc.txt");
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            file.createNewFile();
+            out = new ObjectOutputStream(new FileOutputStream(file, false));
+            out.writeObject(currentUser);
+        }finally {
+            if(out != null)
+                out.close();
+        }
+    }
+
+
+
+    public void Deserializecuser() throws IOException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/userc.txt"));
+            try{
+                User tmp = (User) in.readObject();
+                currentUser = tmp;
+                totalcoin_collected.setText(Integer.toString(currentUser.getCoincollected()));
+            }catch (EOFException e) {
+
+            }catch (ClassCastException e) {
+                System.out.println("Invalid Class Cast Exception");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
         }
     }
 
     public void Serializeuser() throws IOException {
         ObjectOutputStream out = null;
         try {
-            System.out.println("here");
-            out = new ObjectOutputStream(new FileOutputStream("src/main/resources/userlist.txt"));
+            for (int i = users.size()-1; i >=0 ; i--) {
+                if(users.get(i).getName().equals(currentUser.getName())) {
+                    users.get(i).setCurrentScore(currentUser.getHighScore());
+                    users.get(i).setCoincollected(currentUser.getCoincollected() - users.get(i).getCoincollected());
+                }
+            }
+            File file = new File("src/main/resources/userlist.txt");
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            file.createNewFile();
+            out = new ObjectOutputStream(new FileOutputStream(file, false));
             for (User u : users) {
                 out.writeObject(u);
             }
@@ -65,28 +110,120 @@ public class GameController implements Initializable, Serializable {
 
 
 
+    public void Deserializeuser() throws IOException {
+        ObjectInputStream in = null;
+        try {
+            for (int i = users.size()-1; i >=0 ; i--) {
+                users.remove(i);
+            }
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/userlist.txt"));
+            while(true) {
+                try{
+                    User tmp = (User) in.readObject();
+                    users.add(tmp);
+                }catch (EOFException e) {
+                    break;
+                }catch (ClassCastException e) {
+                    System.out.println("Invalid Class Cast Exception");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
+        }
+    }
 
-//    public void Serializeuser() throws IOException {
-//        ObjectOutputStream out = null;
-//        try {
-//            out = new ObjectOutputStream(new FileOutputStream("userslist.txt"));
-//            for (User u : users) {
-//                out.writeObject(u);
-//            }
-//        }finally {
-//            assert out != null;
-//            out.close();
-//        }
-//    }
+
+    public void Serializehighscore() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            File file = new File("src/main/resources/highscorename.txt");
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            file.createNewFile();
+            out = new ObjectOutputStream(new FileOutputStream(file, false));
+            out.writeObject(highscore.getnames());
+
+        }finally {
+            if(out != null)
+                out.close();
+        }
+
+        ObjectOutputStream out1 = null;
+        try {
+            File file = new File("src/main/resources/highscorescore.txt");
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            file.createNewFile();
+            out1 = new ObjectOutputStream(new FileOutputStream(file, false));
+            out1.writeObject(highscore.gethighscore());
+
+        }finally {
+            if(out1 != null)
+                out1.close();
+        }
+    }
+
+
+
+    public void Deserializehighscore() throws IOException {
+        ObjectInputStream in = null;
+        ArrayList<String> namesList = new ArrayList<String>();
+        ArrayList<Integer> number = new ArrayList<Integer>();
+        try {
+
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/highscorename.txt"));
+            try{
+                namesList = (ArrayList) in.readObject();
+            }catch (EOFException e) {
+
+            }catch (ClassCastException e) {
+                System.out.println("Invalid Class Cast Exception");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
+        }
+        ObjectInputStream in1 = null;
+        try {
+            in1 = new ObjectInputStream(new FileInputStream("src/main/resources/highscorescore.txt"));
+            try{
+                number = (ArrayList) in1.readObject();
+                for(int i =0; i < namesList.size(); i++){
+                    highscore.addhighscore(number.get(i), namesList.get(i));
+                }
+                highscore.print();
+            }catch (EOFException e) {
+
+            }catch (ClassCastException e) {
+                System.out.println("Invalid Class Cast Exception");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        finally {
+            if(in1 != null)
+                in1.close();
+        }
+    }
 
     static GameController g = new GameController();
 
     private Hero hero;
-    private static User currentUser;
+    private static User currentUser = new User("");
     private static ArrayList<User> users = new ArrayList<>();
     private boolean onscreen = false;       //to check if any other pop-up is on
     private boolean onhomescreen = true;
     private BossOrc bossorc;
+    private int bossorcpos;
 
     @FXML
     private Parent root;
@@ -117,6 +254,9 @@ public class GameController implements Initializable, Serializable {
     private ImageView quit_game;
     @FXML
     private ImageView coin_logo;
+
+    @FXML
+    private Group won_popup;
 
     @FXML
     private Group add_new_user_popup;
@@ -160,6 +300,9 @@ public class GameController implements Initializable, Serializable {
     private Label enternamelabel;
 
     @FXML
+    private Label totalcoin_collected;
+
+    @FXML
     private TextField nametext;
     @FXML
     private TableView highscoretable;
@@ -168,11 +311,6 @@ public class GameController implements Initializable, Serializable {
     private ImageView knives_logo;
     @FXML
     private ImageView sword_logo;
-
-
-
-
-
 
     private boolean falg_col = false;
 
@@ -186,8 +324,10 @@ public class GameController implements Initializable, Serializable {
     private ArrayList<TranslateTransition> moveplatformsback = new ArrayList<TranslateTransition>();
     private ArrayList<TranslateTransition> moveorcsback = new ArrayList<TranslateTransition>();
 
-    public void loadhighscosre(){
+    private HighScore highscore = new HighScore();
 
+    public void loadhighscosre(){
+        highscore.addhighscore(currentUser);
     }
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
@@ -249,12 +389,11 @@ public class GameController implements Initializable, Serializable {
         int ran2= (int) (Math.random()*8 + 2);
         for (int i = 0; i < ran; i++) {
             if(i==0){
-//                System.out.println("pass");
+
             }
             else{
                 for (int j = 0; j < ran2; j++) {
                     Coin c=new Coin();
-//                    System.out.println("coin generated");
                     c.setX(platform.get(i).getImage().getX() + 50+h);
                     gameobjects.add(c);
                     h=h+40;
@@ -325,6 +464,9 @@ public class GameController implements Initializable, Serializable {
         }
     }
     public void generategameobj(){
+//        Tnt n = new Tnt();
+//        n.setX(500);
+//        gameobjects.add(n);
         for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2 && platform.get(i).getImage().getFitWidth() >= 380) {
@@ -333,10 +475,10 @@ public class GameController implements Initializable, Serializable {
                     gameobjects.add(c);
                 }
                 else{
-                    if(i ==2){
-//                        Chest c = new Chest();
-//                        c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
-//                        gameobjects.add(c);
+                    if(i == 2){
+                        Chest c = new Chest();
+                        c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
+                        gameobjects.add(c);
                     }
                     int t = (int)(Math.random()*7);
                     if(t == 1) {
@@ -357,7 +499,6 @@ public class GameController implements Initializable, Serializable {
                     for(int j = 1; j < Math.random()*platform.get(i).getImage().getFitWidth()/400; j++) {
                         if ((int)(Math.random() * 10) == 2) {
                             Chest c = new Chest();
-//                            System.out.println("In here");
                             c.setX(platform.get(i).getImage().getX() + 200 *j);
                             gameobjects.add(c);
                         }
@@ -373,6 +514,8 @@ public class GameController implements Initializable, Serializable {
         bossorc = o1;
         o1.setX(platform.get(platform.size()-1).getImage().getX() + 200);
         gameobjects.add(o1);
+        bossorcpos = gameobjects.size() - 1;
+        o1.setwonpopup(won_popup, rootmain);
         for(int i = 1; i< gameobjects.size(); i++){
             gameobjects.get(i).display(rootmain);
             gameobjects.get(i).jump();
@@ -391,6 +534,7 @@ public class GameController implements Initializable, Serializable {
         Animations.translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         Animations.translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
         exitgame.start();
+//        bossorcdied.start();
 
         for(int i = 0; i< platform.size(); i++){
             moveplatforms.add(Animations.translateTransition(platform.get(i).getImage(), 100, -200, 0, false, 1));
@@ -398,9 +542,17 @@ public class GameController implements Initializable, Serializable {
         for(int i = 0; i< gameobjects.size(); i++){
             moveorcs.add(Animations.translateTransition(gameobjects.get(i).getImage(), 100, -200, 0, false, 1));
         }
-        hero.jump();
 
-}
+        if(knives_logo != null) hero.setimages(knives_logo, sword_logo);
+        hero.jump();
+        try {
+            Deserializeuser();
+            Deserializecuser();
+            Deserializehighscore();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @FXML
@@ -499,6 +651,9 @@ public class GameController implements Initializable, Serializable {
     @FXML
     void exitgame(MouseEvent event) throws IOException {
         //code to save the data
+        Serializeuser();
+        Serializecuser();
+        Serializehighscore();
         stage = (Stage) rootmain.getScene().getWindow();
         stage.close();
 
@@ -520,19 +675,26 @@ public class GameController implements Initializable, Serializable {
             enternamelabel.setTextFill(Color.color(1, 0, 0));
         }
         else{
+            for(int i =0; i<users.size(); i++){
+                if(name.equals(users.get(i).getName())){
+                    enternamelabel.setTextFill(Color.color(1, 0, 0));
+                    TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
+                    translate.setToX(0);
+                    translate.play();
+                    onscreen = false;
+                    return;
+                }
+            }
             currentUser = new User(name);
             users.add(currentUser);
-            System.out.println(currentUser.getName());
             TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
             translate.setToX(0);
             translate.play();
             onscreen = false;
         }
-//        TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
-//        translate.setToX(0);
-//        translate.play();
-//        onscreen = false;
     }
+
+
     @FXML
     void savesetting(MouseEvent event) {
         //save setting code
@@ -569,6 +731,7 @@ public class GameController implements Initializable, Serializable {
         translate.play();
         onscreen = false;
         if(!onscreen) {
+            exitgame_popup.toFront();
             TranslateTransition translate1 = new TranslateTransition(Duration.millis(400), exitgame_popup);
             translate1.setToX((rootmain.getPrefWidth()+((Node)exitgame_popup).getBoundsInLocal().getWidth())/2);
             translate1.play();
@@ -576,6 +739,14 @@ public class GameController implements Initializable, Serializable {
         }
     }
 
+    @FXML
+    void changetosword(MouseEvent event) {
+        hero.changeweapon(0);
+    }
+    @FXML
+    void changetoknive(MouseEvent event) {
+        hero.changeweapon(1);
+    }
 
     public static void checkcoll(){
         g.collplatform.start();
@@ -600,7 +771,6 @@ public class GameController implements Initializable, Serializable {
         public void handle(long l) {
             for(int i = 0; i< gameobjects.size(); i++){
                 if(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()) == true ){
-//                    System.out.println(hero.getImage().getBoundsInParent().intersects(gameobjects.get(i).getImage().getBoundsInParent()));
                     for (int j = 0; j < moveplatformsback.size(); j++) {
                         moveplatformsback.get(j).stop();
                     }
@@ -648,6 +818,7 @@ public class GameController implements Initializable, Serializable {
                 collplatform.stop();
                 collorc.stop();
                 collorcwithweapon.stop();
+
                 onscreen = true;
                 game_over_popup.toFront();
                 TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
@@ -662,8 +833,12 @@ public class GameController implements Initializable, Serializable {
     AnimationTimer bossorcdied  = new AnimationTimer() {
         @Override
         public void handle(long l) {
-            if(bossorc.gethealth() < 0){
-
+            if(((Orc)gameobjects.get(bossorcpos)).gethealth() <= 0){
+                onscreen = true;
+                won_popup.toFront();
+                TranslateTransition translate = new TranslateTransition(Duration.millis(400), won_popup);
+                translate.setToX(-(rootmain.getPrefWidth() + ((Node) won_popup).getBoundsInLocal().getWidth()) / 2);
+                translate.play();
             }
         }
     };
@@ -680,6 +855,7 @@ public class GameController implements Initializable, Serializable {
         if(currentUser != null) {
             currentUser.setCurrentScore(hero.getSpacecount());
             currentUser.setCoincollected(hero.getCoin_collected());
+            loadhighscosre();
         }
     }
 
@@ -688,7 +864,7 @@ public class GameController implements Initializable, Serializable {
         int temp = hero.resurrection();
         if(temp == -1){
             if(currentUser != null) {
-                revielabel.setText("User " + currentUser.getName()+ "\n Not Enough Coin \nclick on Cancel!!");
+                revielabel.setText("User " + currentUser.getName()+ " Not Enough Coin \nclick on Cancel!!");
                 revielabel.setTextFill(Color.color(1, 0, 0));
             }
             else{
@@ -717,13 +893,22 @@ public class GameController implements Initializable, Serializable {
             for(int i = 0; i< gameobjects.size(); i++){
                 Animations.translateTransition(gameobjects.get(i).getImage(), 10, temp1, 0, false, 1).play();
             }
+            loadhighscosre();
         }
     }
 
 
     @FXML
     void save_game(MouseEvent event) throws IOException, InterruptedException {
+        if(currentUser != null) {
+            loadhighscosre();
+            currentUser.setCurrentScore(hero.getSpacecount());
+            currentUser.setCoincollected(hero.getCoin_collected());
+
+        }
         Serializeuser();
+        Serializecuser();
+        Serializehighscore();
         reload_game(event);
         //serilize user
     }
@@ -740,6 +925,7 @@ public class GameController implements Initializable, Serializable {
         if(!onscreen){
             if(event.getCode() == KeyCode.SPACE && onhomescreen){
                 //Move All the Icons out of the screen
+                totalcoin_collected.toBack();
                 Animations.translateTransition(will_hero_name, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 Animations.translateTransition(Cursor_icon, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 Animations.translateTransition(setting_logo, 200, -100, 0, false, 1).play();
@@ -777,23 +963,6 @@ public class GameController implements Initializable, Serializable {
                }
            };
 
-           Thread thread4 = new Thread(){
-               @Override
-               public void run(){
-                   for(int i = 0; i< moveorcs.size(); i++){
-                       moveorcs.get(i).play();
-                   }
-               }
-           };
-
-           Thread thread3 = new Thread(){
-               @Override
-               public void run(){
-                   for(int i = 0; i< moveplatforms.size(); i++){
-                       moveplatforms.get(i).play();
-                   }
-               }
-           };
 //
 //           thread3.start();
 //           thread2.start();
@@ -808,7 +977,6 @@ public class GameController implements Initializable, Serializable {
            for(int i = 0; i< moveorcs.size(); i++){
                moveorcs.get(i).play();
            }
-//           System.out.println((int)(Math.random()*2));
 //           try {
 //               Thread.sleep(300);
 //           } catch (InterruptedException e) {
@@ -816,7 +984,6 @@ public class GameController implements Initializable, Serializable {
 //           }
 //           moveplatforms.get(moveplatforms.size()-1).setOnFinished(e->{
 //               double temp = -70;
-//               System.out.println(temp);
 //               for (int i = 0; i < moveplatformsback.size(); i++) {
 //                   moveplatformsback.remove(i);
 //               }
