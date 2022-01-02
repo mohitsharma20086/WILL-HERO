@@ -24,7 +24,7 @@ public class Platform{
         platform = new ImageView();
         onscreen = false;
 
-        int r = (int)(Math.random()*9+1);
+        int r = (int)(Math.random()*8+1);
         ra = r;
         if(i == 0){                 //set first platform
             platform.setImage(new Image((new File("src/main/resources/platforml.png")).toURI().toString()));
@@ -34,7 +34,7 @@ public class Platform{
         else if(i == -1){                 //set first platform
             platform.setImage(new Image((new File("src/main/resources/platformla.png")).toURI().toString()));
             platform.setFitHeight(125);
-            platform.setFitWidth(450);
+            platform.setFitWidth(1500);
         }
         else{
             String path = "src/main/resources/platform"+r+".png";

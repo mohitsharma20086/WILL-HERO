@@ -204,6 +204,9 @@ public class GameController implements Initializable {
         }
     }
     public void generategameobj(){
+//        RedOrc or = new RedOrc();
+//        gameobjects.add(or);
+//        gameobjects.get(0).display(rootmain);
         for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2 && platform.get(i).getPlatform().getFitWidth() >= 380) {
@@ -238,7 +241,7 @@ public class GameController implements Initializable {
                 }
         }
         BossOrc o1 = new BossOrc();
-        o1.setX(platform.get(platform.size()-1).getPlatform().getX() + 300);
+        o1.setX(platform.get(platform.size()-1).getPlatform().getX() + 200);
         gameobjects.add(o1);
         for(int i = 1; i< gameobjects.size(); i++){
             gameobjects.get(i).display(rootmain);
@@ -251,7 +254,6 @@ public class GameController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         hero = new Hero(rootmain);
-        hero.jump();
         moveclouds();
         generateplatforms();
         generategameobj();
@@ -265,6 +267,7 @@ public class GameController implements Initializable {
         for(int i = 0; i< gameobjects.size(); i++){
             moveorcs.add(Animations.translateTransition(gameobjects.get(i).getImage(), 100, -200, 0, false, 1));
         }
+        hero.jump();
 }
 
 
@@ -492,21 +495,21 @@ public class GameController implements Initializable {
         @Override
         public void handle(long l) {
             if(hero.isFlagexit() == true) {
-//                for (int i = 0; i < moveplatformsback.size(); i++) {
-//                    moveplatformsback.get(i).stop();
-//                }
-//                for (int i = 0; i < moveorcsback.size(); i++) {
-//                    moveorcsback.get(i).stop();
-//                }
-//                collplatform.stop();
-//                collorc.stop();
-//                collorcwithweapon.stop();
-//                onscreen = true;
-//                game_over_popup.toFront();
-//                TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
-//                translate.setToX(-(rootmain.getPrefWidth() + ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
-//                translate.play();
-//                exitgame.stop();
+                for (int i = 0; i < moveplatformsback.size(); i++) {
+                    moveplatformsback.get(i).stop();
+                }
+                for (int i = 0; i < moveorcsback.size(); i++) {
+                    moveorcsback.get(i).stop();
+                }
+                collplatform.stop();
+                collorc.stop();
+                collorcwithweapon.stop();
+                onscreen = true;
+                game_over_popup.toFront();
+                TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
+                translate.setToX(-(rootmain.getPrefWidth() + ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
+                translate.play();
+                exitgame.stop();
             }
         }
     };

@@ -21,8 +21,9 @@ public class BossOrc extends Orc{
         bossorc = new ImageView();
         bossorc.setImage(new Image((new File("src/main/resources/NormalOrc.png")).toURI().toString()));
         bossorc.setFitHeight(120);
-        bossorc.setFitWidth(86);
-        bossorc.setY(386);
+        bossorc.setFitWidth(95);
+        bossorc.setY(320);
+        bossorc.setX(500);
     }
 
 
@@ -47,67 +48,72 @@ public class BossOrc extends Orc{
 
     @Override
     public void jump(){
-        orcjump = Animations.translateTransition(bossorc, 300,0,-70, true, -1);
+        orcjump = Animations.translateTransition(bossorc, 300,0,-90, true, -1);
 //        orcjump.play();
     }
 
     @Override
-    public void oncollide(Gameobject g){
-        orcjump = Animations.translateTransition(bossorc, 300,0,-70, true, -1);
-        orcjump.stop();
-        if(g instanceof Weapon) health--;
-        TranslateTransition translate1 = new TranslateTransition(Duration.millis(100),bossorc);
-        translate1.setCycleCount(1);
-        translate1.setByX(60);
-        translate1.setAutoReverse(false);
-        translate1.play();
+    public void oncollide(Gameobject g) {
 
-        TranslateTransition translate = new TranslateTransition(Duration.millis(100),bossorc);
-        translate.setCycleCount(1);
-        translate.setToY(3);
-        translate.setAutoReverse(false);
-        translate.play();
-        translate.setOnFinished(e1 ->{
-            if(health <= 0){
-                TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), bossorc);
-                translate2.setCycleCount(1);
-                translate2.setToY(150);
-                translate2.setAutoReverse(false);
-                translate2.play();
-                translate2.setOnFinished(e->{
-                    bossorc.setImage(null);
-                });
+        orcjump = Animations.translateTransition(bossorc, 300, 0, -90, true, -1);
+        int temp = ((Hero) g).getSpacecount();
+        if (lastspacecount != temp) {
+            lastspacecount = temp;
+            orcjump.stop();
+            if (g instanceof Weapon) health--;
+            else if(g instanceof Hero && ((Hero) g).getCurrentweapon() != null)health--;
+            TranslateTransition translate1 = new TranslateTransition(Duration.millis(100), bossorc);
+            translate1.setCycleCount(1);
+            translate1.setByX(60);
+            translate1.setAutoReverse(false);
+            translate1.play();
 
-            }
-            else {
-                if (flagonplatform == false) {     // plat start >=
-                    int temp = ((Hero) g).getSpacecount();
-                    Double t = bossorc.getX();
-                    int f = -1;
-                    for (int i = 0; i < platformstarts.size(); i++) {
-                        if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
-                            if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
-                                System.out.println("on platform  " + (i));
-                                orcjump.play();
-                                f = 0;
-                                break;
+            TranslateTransition translate = new TranslateTransition(Duration.millis(100), bossorc);
+            translate.setCycleCount(1);
+            translate.setToY(3);
+            translate.setAutoReverse(false);
+            translate.play();
+            translate.setOnFinished(e1 -> {
+                if (health <= 0) {
+                    TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), bossorc);
+                    translate2.setCycleCount(1);
+                    translate2.setToY(150);
+                    translate2.setAutoReverse(false);
+                    translate2.play();
+                    translate2.setOnFinished(e -> {
+                        bossorc.setImage(null);
+                    });
+
+                } else {
+                    if (flagonplatform == false) {     // plat start >=
+
+                        Double t = bossorc.getX();
+                        int f = -1;
+                        for (int i = 0; i < platformstarts.size(); i++) {
+                            if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
+                                if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
+                                    System.out.println("on platform  " + (i));
+                                    orcjump.play();
+                                    f = 0;
+                                    break;
+                                }
                             }
                         }
+                        if (f == -1) {
+                            TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), bossorc);
+                            translate2.setCycleCount(1);
+                            translate2.setToY(300);
+                            translate2.setAutoReverse(false);
+                            translate2.play();
+                        }
+                    } else {
+                        orcjump.play();
                     }
-                    if (f == -1) {
-                        TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), bossorc);
-                        translate2.setCycleCount(1);
-                        translate2.setToY(300);
-                        translate2.setAutoReverse(false);
-                        translate2.play();
-                    }
-                } else {
-                    orcjump.play();
                 }
-            }
-        });
-
+            });
+        }
     }
+
 
 }
 
