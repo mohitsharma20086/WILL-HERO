@@ -6,9 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-
+import javafx.scene.control.Label;
 import java.io.File;
 import java.util.ArrayList;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Hero extends Gameobject {
@@ -29,6 +33,8 @@ public class Hero extends Gameobject {
     private boolean flagexit = false;
     private boolean another_space1 = false;
     private int spacecount = 0;
+    Label coincount=new Label();
+    Label stepcountl = new Label();
 
 
     Hero(AnchorPane mainpane){
@@ -40,6 +46,35 @@ public class Hero extends Gameobject {
         hero.setY(386);
         hero.setX(320);
         mainpane.getChildren().add(hero);
+
+        //set coin label
+        coincount.setLayoutX(900.0);
+        coincount.setLayoutY(18.0);
+        coincount.setPrefWidth(67.0);
+        coincount.setPrefHeight(46.0);
+        coincount.minWidth(Region.USE_COMPUTED_SIZE);
+        coincount.minHeight(Region.USE_COMPUTED_SIZE);
+        coincount.maxHeight(Region.USE_COMPUTED_SIZE);
+        coincount.maxWidth(Region.USE_COMPUTED_SIZE);
+        Font font = Font.font("Verdana", FontWeight.EXTRA_BOLD, 25);
+        coincount.setFont(font);
+        coincount.setTextFill(Paint.valueOf("#fcfcfc"));
+        rootmain.getChildren().add(coincount);
+
+        //set stepcount label
+        stepcountl.setLayoutX(400);
+        stepcountl.setLayoutY(18.0);
+        stepcountl.setPrefWidth(170);
+        stepcountl.setPrefHeight(46.0);
+        stepcountl.minWidth(Region.USE_COMPUTED_SIZE);
+        stepcountl.minHeight(Region.USE_COMPUTED_SIZE);
+        stepcountl.maxHeight(Region.USE_COMPUTED_SIZE);
+        stepcountl.maxWidth(Region.USE_COMPUTED_SIZE);
+        Font font1 = Font.font("Verdana", FontWeight.EXTRA_BOLD, 25);
+        stepcountl.setFont(font1);
+        stepcountl.setTextFill(Paint.valueOf("#fcfcfc"));
+        rootmain.getChildren().add(stepcountl);
+        coincount.setText(Integer.toString(coin_collected));
 
     }
 
@@ -74,7 +109,10 @@ public class Hero extends Gameobject {
     public void setcurrentweapon(int i){
         currentweapon = w[i];
     }
-
+    public void update(){
+        coincount.setText(Integer.toString(coin_collected));
+        coincount.toFront();
+    }
     public void addplatformd(double i, double j){
         platformstarts.add(i);
         platformsize.add(j);

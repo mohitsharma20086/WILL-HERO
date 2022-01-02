@@ -187,7 +187,35 @@ public class GameController implements Initializable, Serializable {
         t.setCycleCount(Animation.INDEFINITE);
         t.play();
     }
-
+    public void generateCoin(){
+        int temp = gameobjects.size();
+        int ran= (int) (Math.random()*10 + 2);
+        int h=300;
+        int ran2= (int) (Math.random()*8 + 2);
+        for (int i = 0; i < ran; i++) {
+            if(i==0){
+//                System.out.println("pass");
+            }
+            else{
+                for (int j = 0; j < ran2; j++) {
+                    Coin c=new Coin();
+//                    System.out.println("coin generated");
+                    c.setX(platform.get(i).getImage().getX() + 50+h);
+                    gameobjects.add(c);
+                    h=h+40;
+                }
+            }
+        }
+        for (int j = temp; j < gameobjects.size(); j++){
+            (gameobjects.get(j)).display(rootmain);
+        }
+    }
+    public void removeCoin(){
+        for(int i = gameobjects.size() -1; i >= 0; i--){
+            gameobjects.get(i).remove(rootmain);
+            gameobjects.remove(i);
+        }
+    }
 
     public void removeplatforms(){
         Platform.setplatform_id(0);Platform.setplatform_id(0);
