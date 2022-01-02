@@ -23,7 +23,7 @@ public class Chest extends Gameobject{
         id = count;
         count++;
     }
-
+    @Override
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(chest);
         chest.toFront();
@@ -32,15 +32,20 @@ public class Chest extends Gameobject{
     public void setX(double x){
         chest.setX(x);
     }
-
+    @Override
     public void oncollide(Gameobject g){
         if(opened == false){
         if(g instanceof Hero ){
                 chest.setImage(null);
                 chest.setImage(new Image((new File("src/main/resources/ChestOpen.png")).toURI().toString()));
-                if(((int)(Math.random()*3) == 1) || id == 1){
+                if(id == 1){
+                    ((Hero)g).addweapon(1);
+                }
+                else if(id == 2){
+                    ((Hero)g).addweapon(0);
+                }
+                else if(((int)(Math.random()*3) == 1) ){
                     ((Hero)g).addweapon((int)(Math.random()*2));
-//                ((Hero)g).addweapon(0);
                 }
                 else{
                     ((Hero)g).addcoin(5);
@@ -65,12 +70,12 @@ public class Chest extends Gameobject{
         }
         }
     }
-
+    @Override
     public void jump(){
         chestjump = Animations.translateTransition(chest, 300,0,-5, true, -1);
         chestjump.play();
     }
-
+    @Override
     public ImageView getImage(){
         return chest;
     }
