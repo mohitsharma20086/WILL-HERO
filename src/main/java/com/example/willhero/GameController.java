@@ -8,6 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -47,10 +49,44 @@ public class GameController implements Initializable, Serializable {
         }
     }
 
+    public void Serializeuser() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            System.out.println("here");
+            out = new ObjectOutputStream(new FileOutputStream("src/main/resources/userlist.txt"));
+            for (User u : users) {
+                out.writeObject(u);
+            }
+        }finally {
+            if(out != null)
+                out.close();
+        }
+    }
+
+
+
+
+//    public void Serializeuser() throws IOException {
+//        ObjectOutputStream out = null;
+//        try {
+//            out = new ObjectOutputStream(new FileOutputStream("userslist.txt"));
+//            for (User u : users) {
+//                out.writeObject(u);
+//            }
+//        }finally {
+//            assert out != null;
+//            out.close();
+//        }
+//    }
+
     static GameController g = new GameController();
 
     private Hero hero;
-    private int coins_collected;        //coins
+    private static User currentUser;
+    private static ArrayList<User> users = new ArrayList<>();
+    private boolean onscreen = false;       //to check if any other pop-up is on
+    private boolean onhomescreen = true;
+    private BossOrc bossorc;
 
     @FXML
     private Parent root;
@@ -58,11 +94,6 @@ public class GameController implements Initializable, Serializable {
     private Stage stage;
     @FXML
     private Scene scene;
-
-    private static User currentUser;
-    private boolean onscreen = false;       //to check if any other pop-up is on
-    private boolean onhomescreen = true;
-
     @FXML
     private AnchorPane rootmain;
 
@@ -124,6 +155,22 @@ public class GameController implements Initializable, Serializable {
 
     @FXML
     private Label revielabel;
+
+    @FXML
+    private Label enternamelabel;
+
+    @FXML
+    private TextField nametext;
+    @FXML
+    private TableView highscoretable;
+
+    @FXML
+    private ImageView knives_logo;
+    @FXML
+    private ImageView sword_logo;
+
+
+
 
 
 
@@ -241,6 +288,8 @@ public class GameController implements Initializable, Serializable {
         platform.add(p1);
         platform.get(0).setPlatformx(c+r);
         hero.addplatformd(c+r,p1.getplatformw(0));
+        Orc.addplatformd(c+r,p1.getplatformw(0));
+        Orc.addplaform(p1.getImage());
         c += platform.get(0).getImage().getFitWidth()+ 40;
 //        c += 200;
         r = ((int)(Math.random()*60+40)/10)*10;
@@ -251,6 +300,8 @@ public class GameController implements Initializable, Serializable {
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
             hero.addplatformd(c+r,p.getplatformw(i));
+            Orc.addplatformd(c+r,p.getplatformw(i));
+            Orc.addplaform(p.getImage());
             c += platform.get(i).getImage().getFitWidth()+ 60;
             r = ((int)(Math.random()*60+40)/10)*10;
 //            r = 200;
@@ -261,7 +312,10 @@ public class GameController implements Initializable, Serializable {
         platform.add(p);
         platform.get(i).setPlatformx(c+r);
         hero.addplatformd(c+r,p.getplatformw(i));
+        Orc.addplatformd(c+r,p.getplatformw(i));
+        Orc.addplaform(p.getImage());
         platform.get(i).display(rootmain);
+
     }
 
     public void removegameobj(){
@@ -271,7 +325,6 @@ public class GameController implements Initializable, Serializable {
         }
     }
     public void generategameobj(){
-        gameobjects.get(0).display(rootmain);
         for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
                 if ((int)(Math.random() * 8) == 2 && platform.get(i).getImage().getFitWidth() >= 380) {
@@ -281,9 +334,9 @@ public class GameController implements Initializable, Serializable {
                 }
                 else{
                     if(i ==2){
-                        Chest c = new Chest();
-                        c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
-                        gameobjects.add(c);
+//                        Chest c = new Chest();
+//                        c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
+//                        gameobjects.add(c);
                     }
                     int t = (int)(Math.random()*7);
                     if(t == 1) {
@@ -317,6 +370,7 @@ public class GameController implements Initializable, Serializable {
                 }
         }
         BossOrc o1 = new BossOrc();
+        bossorc = o1;
         o1.setX(platform.get(platform.size()-1).getImage().getX() + 200);
         gameobjects.add(o1);
         for(int i = 1; i< gameobjects.size(); i++){
@@ -345,6 +399,7 @@ public class GameController implements Initializable, Serializable {
             moveorcs.add(Animations.translateTransition(gameobjects.get(i).getImage(), 100, -200, 0, false, 1));
         }
         hero.jump();
+
 }
 
 
@@ -442,7 +497,7 @@ public class GameController implements Initializable, Serializable {
     }
 
     @FXML
-    void exitgame(MouseEvent event) {
+    void exitgame(MouseEvent event) throws IOException {
         //code to save the data
         stage = (Stage) rootmain.getScene().getWindow();
         stage.close();
@@ -460,11 +515,23 @@ public class GameController implements Initializable, Serializable {
 
     @FXML
     void addnewuser(MouseEvent event) {
-        //code to add new user
-        TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
-        translate.setToX(0);
-        translate.play();
-        onscreen = false;
+        String name = nametext.getText();
+        if (name == "") {
+            enternamelabel.setTextFill(Color.color(1, 0, 0));
+        }
+        else{
+            currentUser = new User(name);
+            users.add(currentUser);
+            System.out.println(currentUser.getName());
+            TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
+            translate.setToX(0);
+            translate.play();
+            onscreen = false;
+        }
+//        TranslateTransition translate = new TranslateTransition(Duration.millis(300), add_new_user_popup);
+//        translate.setToX(0);
+//        translate.play();
+//        onscreen = false;
     }
     @FXML
     void savesetting(MouseEvent event) {
@@ -591,6 +658,16 @@ public class GameController implements Initializable, Serializable {
         }
     };
 
+
+    AnimationTimer bossorcdied  = new AnimationTimer() {
+        @Override
+        public void handle(long l) {
+            if(bossorc.gethealth() < 0){
+
+            }
+        }
+    };
+
     @FXML
     void reload_game(MouseEvent event) throws IOException, InterruptedException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -600,18 +677,25 @@ public class GameController implements Initializable, Serializable {
         hero.setcuurentplatform(0);
         generategameobj();
         displaygame(stage);
+        if(currentUser != null) {
+            currentUser.setCurrentScore(hero.getSpacecount());
+            currentUser.setCoincollected(hero.getCoin_collected());
+        }
     }
-
 
     @FXML
     void resume_game(MouseEvent event) throws Exception {
         int temp = hero.resurrection();
         if(temp == -1){
-            revielabel.setText("Not Enough Coin \nclick on Cancel!!");
+            if(currentUser != null) {
+                revielabel.setText("User " + currentUser.getName()+ "\n Not Enough Coin \nclick on Cancel!!");
+                revielabel.setTextFill(Color.color(1, 0, 0));
+            }
+            else{
+                revielabel.setText("Not Enough Coin \nclick on Cancel!!");
+            }
         }
         else{
-//            System.out.println("in here "+ temp);
-
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
             translate.setToX((rootmain.getPrefWidth() - ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
             translate.play();
@@ -621,34 +705,31 @@ public class GameController implements Initializable, Serializable {
             hero.addcoin(-20);
             double temp1 = 0;
             for(int i = 1; i < platform.size(); i++){
-//                System.out.println(platform.get(i-1).getImage().getX()+" "+hero.getImage().getX());
                 if((platform.get(i).getImage().getX()- hero.getSpacecount()*(200)) >= hero.getImage().getX()){
                     temp = i-1;
                     temp1 = -(platform.get(i-1).getImage().getX()- hero.getSpacecount()*(200)) + hero.getImage().getX();
                     break;
                 }
             }
-//            System.out.println(temp+"  "+temp1);
-
             for(int i = 0; i< platform.size(); i++){
                 Animations.translateTransition(platform.get(i).getImage(), 10, temp1, 0, false, 1).play();
             }
             for(int i = 0; i< gameobjects.size(); i++){
                 Animations.translateTransition(gameobjects.get(i).getImage(), 10, temp1, 0, false, 1).play();
             }
-//            for (int i = 0; i < moveplatformsback.size(); i++) {
-//                moveplatformsres.get(i).play();
-//            }
-//            for (int i = 0; i < moveorcsback.size(); i++) {
-//                moveorcsres.get(i).play();
-//            }
         }
-
     }
 
 
     @FXML
-    void save_game(MouseEvent event) {
+    void save_game(MouseEvent event) throws IOException, InterruptedException {
+        Serializeuser();
+        reload_game(event);
+        //serilize user
+    }
+
+    @FXML
+    void load_game(MouseEvent event) {
 
     }
 
@@ -676,7 +757,6 @@ public class GameController implements Initializable, Serializable {
             }
         }
        if(event.getCode() == KeyCode.SPACE && !onhomescreen && !onscreen){
-//           System.out.println("was in space");
            for (int i = 0; i < moveplatformsback.size(); i++) {
                moveplatformsback.get(i).stop();
            }

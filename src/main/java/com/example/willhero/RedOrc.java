@@ -54,6 +54,12 @@ public class RedOrc extends Orc{
 
     @Override
     public void oncollide(Gameobject g){
+        if (g instanceof Hero){
+            if(redorc.getY() > ((Hero) g).getImage().getY()){
+                ((Hero) g).fall();
+                return;
+            }
+        }
         orcjump = Animations.translateTransition(redorc, 300,0,-80, true, -1);
         int temp;
         if(redorc.getImage() == null)return;
@@ -97,17 +103,14 @@ public class RedOrc extends Orc{
                     });
 
                 } else {
+                    flagonplatform = false;
                     if (flagonplatform == false) {
                         Double t = redorc.getX();
                         int f = -1;
-                        for (int i = 0; i < platformstarts.size(); i++) {
-                            if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
-                                if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
-                                    System.out.println("on platform  " + (i));
-                                    orcjump.play();
-                                    f = 0;
-                                    break;
-                                }
+                        for (int i = 0; i < platforms.size(); i++) {
+                            if(redorc.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())){
+                                f = 0;
+                                orcjump.play();
                             }
                         }
                         if (f == -1) {
@@ -117,6 +120,7 @@ public class RedOrc extends Orc{
                             translate2.setAutoReverse(false);
                             translate2.play();
                         }
+
                     } else {
                         orcjump.play();
                     }
