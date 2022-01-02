@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 // no platform7   add the image
 
-public class Platform{
+public class Platform extends Gameobject{
     private static int platform_id = 0;
     private static int distance = 0;
     private ImageView platform;
@@ -38,6 +38,7 @@ public class Platform{
         }
         else{
             String path = "src/main/resources/platform"+r+".png";
+//            System.out.println(r);
             platform.setImage(new Image((new File(path)).toURI().toString()));
             platform.setFitHeight(platformh[r]);
             platform.setFitWidth(platformw[r]);
@@ -55,12 +56,12 @@ public class Platform{
     public void setPlatformx(double x){
         platform.setX(x);
     }
-
+    @Override
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(platform);
         platform.toFront();
     }
-
+    @Override
     public void remove(AnchorPane mainpane){
         mainpane.getChildren().remove(platform);
     }
@@ -72,8 +73,8 @@ public class Platform{
     public void setOnscreen(boolean onscreen) {
         this.onscreen = onscreen;
     }
-
-    public ImageView getPlatform(){
+    @Override
+    public ImageView getImage(){
         return platform;
     }
 
@@ -113,6 +114,15 @@ public class Platform{
 
     public double getplatformw(int i){
         return platformw[ra];
+    }
+    @Override
+    public void jump(){
+
+    }
+
+    @Override
+    public void oncollide(Gameobject g) {
+
     }
 }
 

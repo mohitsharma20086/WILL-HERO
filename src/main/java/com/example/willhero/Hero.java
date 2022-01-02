@@ -43,12 +43,14 @@ public class Hero extends Gameobject {
 
     }
 
+    @Override
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(hero);
     }
 
     public void addcoin(int x){
         coin_collected += x;
+        coincount.setText(Integer.toString(coin_collected));
     }
 
     public void addweapon(int i){
@@ -79,6 +81,7 @@ public class Hero extends Gameobject {
         Orc.addplatformd(i,j);
     }
 
+    @Override
     public void jump(){
         herojump = Animations.translateTransition(hero, 300,0,-70, true, -1);
         herojump.play();
@@ -122,7 +125,6 @@ public class Hero extends Gameobject {
 //                    System.out.println("size " + (platformstarts.get(i) -spacecount*(200) + platformsize.get(i))+ " " +t);
                     if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
                         if (Double.compare((platformstarts.get(i) -spacecount*(200) + platformsize.get(i)), t) > 30) {
-                            System.out.println("on platform  "+(i));
                             herojump.play();
                             if(currentweapon != null)currentweapon.movewithhero();
                             f = 0;
@@ -148,7 +150,7 @@ public class Hero extends Gameobject {
         });
     }
 
-
+    @Override
     public ImageView getImage(){
         return hero;
     }
@@ -166,6 +168,10 @@ public class Hero extends Gameobject {
         another_space1 = true;
         this.another_space.set(true);
         spacecount++;
+        coincount.setText(Integer.toString(coin_collected));
+        stepcountl.setText("Score :  " +Integer.toString(spacecount));
+        coincount.toFront();
+        stepcountl.toFront();
     }
 
     public void moveback(){
@@ -189,5 +195,30 @@ public class Hero extends Gameobject {
 
     public int getSpacecount() {
         return spacecount;
+    }
+
+
+    public int resurrection(){
+        if(coin_collected >= 20){
+            Double t = hero.getX();
+            for(int i = currentplatform; i < platformstarts.size();i++) {
+                if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
+                    return i+1;
+                }
+            }
+        }
+        return 1;
+    }
+
+    public void setXY(){
+        flagexit = false;
+        flagonplatform = true;
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(2),hero);
+        translate1.setCycleCount(1);
+        translate1.setToY(0);
+        translate1.setAutoReverse(false);
+        translate1.play();
+        if(currentweapon != null)currentweapon.resurrect();
+//        TranslateTransition new = TranslateTransition()
     }
 }
