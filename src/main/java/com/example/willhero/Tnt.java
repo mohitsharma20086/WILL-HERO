@@ -47,7 +47,8 @@ public class Tnt extends Gameobject{
                 if(t.get() == 0) {
                     t.incrementAndGet();
                 }
-                else {
+                else if(t.get() == 1){
+                    t.incrementAndGet();
                     tnt.setImage(new Image((new File("src/main/resources/Tntblast.png")).toURI().toString()));
                     tnt.setFitHeight(150);
                     tnt.setFitWidth(150);
@@ -62,8 +63,11 @@ public class Tnt extends Gameobject{
                     h.fall();
                 }
                 }
+                else{
+                    tnt.setImage(null);
+                }
             }));
-            timeline.setCycleCount(2);
+            timeline.setCycleCount(3);
             timeline.play();
         }
     }

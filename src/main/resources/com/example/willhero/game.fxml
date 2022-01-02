@@ -349,5 +349,10 @@
             </AnchorPane>
          </children>
       </Group>
+      <Label fx:id="totalcoin_collected" layoutX="890.0" layoutY="26.0" text="0" textFill="WHITE">
+         <font>
+            <Font name="Aparajita Bold" size="25.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

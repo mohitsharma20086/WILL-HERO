@@ -19,9 +19,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-//pop up to show you won
-
-
 
 
 import java.io.*;
@@ -31,6 +28,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameController implements Initializable, Serializable {
+    private static final long serialVersionUID = 2L;
 
     public void Serialize() throws IOException {
         ObjectOutputStream out = null;
@@ -41,12 +39,93 @@ public class GameController implements Initializable, Serializable {
                 out.writeObject(gameObject);
             }
         }finally {
-            assert out != null;
+             if(out != null)
             out.close();
         }
     }
 
+    public void Serializecuser() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            File file = new File("src/main/resources/userc.txt");
+            if (file.exists() && file.isFile()) {
+                file.delete();
+            }
+            file.createNewFile();
+            out = new ObjectOutputStream(new FileOutputStream(file, false));
+            out.writeObject(currentUser);
+        }finally {
+            if(out != null)
+                out.close();
+        }
+    }
+
+
+
+    public void Deserializecuser() throws IOException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/userc.txt"));
+            try{
+                User tmp = (User) in.readObject();
+                currentUser = tmp;
+                totalcoin_collected.setText(Integer.toString(currentUser.getCoincollected()));
+                System.out.println(tmp.getHighScore()+"  "+tmp.getCoincollected()+" "+tmp.getName());
+            }catch (EOFException e) {
+
+            }catch (ClassCastException e) {
+                System.out.println("Invalid Class Cast Exception");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
+        }
+    }
+
     public void Serializeuser() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream("src/main/resources/userlist.txt", false));
+            for (User u : users) {
+                out.writeObject(u);
+            }
+        }finally {
+            if(out != null)
+                out.close();
+        }
+    }
+
+
+
+    public void Deserializeuser() throws IOException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/userlist.txt"));
+            while(true) {
+                try{
+                    User tmp = (User) in.readObject();
+                    users.add(tmp);
+//                    System.out.println(tmp.getHighScore()+"  "+tmp.getCoincollected());
+                }catch (EOFException e) {
+                    break;
+                }catch (ClassCastException e) {
+                    System.out.println("Invalid Class Cast Exception");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
+        }
+    }
+
+
+    public void Serializehighscore() throws IOException {
         ObjectOutputStream out = null;
         try {
             out = new ObjectOutputStream(new FileOutputStream("src/main/resources/userlist.txt"));
@@ -61,19 +140,29 @@ public class GameController implements Initializable, Serializable {
 
 
 
-
-//    public void Serializeuser() throws IOException {
-//        ObjectOutputStream out = null;
-//        try {
-//            out = new ObjectOutputStream(new FileOutputStream("userslist.txt"));
-//            for (User u : users) {
-//                out.writeObject(u);
-//            }
-//        }finally {
-//            assert out != null;
-//            out.close();
-//        }
-//    }
+    public void Deserializehighscore() throws IOException {
+        ObjectInputStream in = null;
+        try {
+            in = new ObjectInputStream(new FileInputStream("src/main/resources/userlist.txt"));
+            while(true) {
+                try{
+                    User tmp = (User) in.readObject();
+                    users.add(tmp);
+                    System.out.println(tmp.getHighScore()+"  "+tmp.getCoincollected());
+                }catch (EOFException e) {
+                    break;
+                }catch (ClassCastException e) {
+                    System.out.println("Invalid Class Cast Exception");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        finally {
+            if(in != null)
+                in.close();
+        }
+    }
 
     static GameController g = new GameController();
 
@@ -158,6 +247,9 @@ public class GameController implements Initializable, Serializable {
 
     @FXML
     private Label enternamelabel;
+
+    @FXML
+    private Label totalcoin_collected;
 
     @FXML
     private TextField nametext;
@@ -331,7 +423,7 @@ public class GameController implements Initializable, Serializable {
                     gameobjects.add(c);
                 }
                 else{
-                    if(i > 0){
+                    if(i == 2){
                         Chest c = new Chest();
                         c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
                         gameobjects.add(c);
@@ -402,8 +494,13 @@ public class GameController implements Initializable, Serializable {
 
         if(knives_logo != null) hero.setimages(knives_logo, sword_logo);
         hero.jump();
-
-}
+        try {
+            Deserializeuser();
+            Deserializecuser();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @FXML
@@ -502,6 +599,8 @@ public class GameController implements Initializable, Serializable {
     @FXML
     void exitgame(MouseEvent event) throws IOException {
         //code to save the data
+        Serializeuser();
+        Serializecuser();
         stage = (Stage) rootmain.getScene().getWindow();
         stage.close();
 
@@ -744,6 +843,7 @@ public class GameController implements Initializable, Serializable {
             currentUser.setCoincollected(hero.getCoin_collected());
         }
         Serializeuser();
+        Serializecuser();
         reload_game(event);
         //serilize user
     }
@@ -760,6 +860,7 @@ public class GameController implements Initializable, Serializable {
         if(!onscreen){
             if(event.getCode() == KeyCode.SPACE && onhomescreen){
                 //Move All the Icons out of the screen
+                totalcoin_collected.toBack();
                 Animations.translateTransition(will_hero_name, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 Animations.translateTransition(Cursor_icon, 400, rootmain.getPrefWidth(), 0, false, 1).play();
                 Animations.translateTransition(setting_logo, 200, -100, 0, false, 1).play();

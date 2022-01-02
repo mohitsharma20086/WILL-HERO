@@ -78,7 +78,7 @@ public class Hero extends Gameobject {
         stepcountl.setTextFill(Paint.valueOf("#fcfcfc"));
         rootmain.getChildren().add(stepcountl);
         coincount.setText(Integer.toString(coin_collected));
-
+        coincount.toBack();
     }
 
     @Override

@@ -5,9 +5,8 @@ import java.util.ArrayList;
 //patter problem - singleton
 
 public class HighScore {
-    private static HighScore highScore = null;
-    private static ArrayList<String> usersname = new ArrayList<>();
-    private static ArrayList<String> hidghscore = new ArrayList<>();
+    private ArrayList<String> usersname = new ArrayList<>();
+    private ArrayList<String> hidghscore = new ArrayList<>();
 //
 //    private HighScore() {
 //    }
