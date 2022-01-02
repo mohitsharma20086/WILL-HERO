@@ -19,10 +19,11 @@ public class RedOrc extends Orc{
     RedOrc(){
         super(3);
         redorc = new ImageView();
-        redorc.setImage(new Image((new File("src/main/resources/NormalOrc.png")).toURI().toString()));
-        redorc.setFitHeight(120);
-        redorc.setFitWidth(86);
-        redorc.setY(386);
+        redorc.setImage(new Image((new File("src/main/resources/RedOrc.png")).toURI().toString()));
+        redorc.setFitHeight(90);
+        redorc.setFitWidth(60);
+        redorc.setY(346);
+        redorc.setX(500);
     }
 
 
@@ -53,60 +54,70 @@ public class RedOrc extends Orc{
 
     @Override
     public void oncollide(Gameobject g){
-        orcjump = Animations.translateTransition(redorc, 300,0,-70, true, -1);
-        orcjump.stop();
-        if(g instanceof Weapon) health--;
-        TranslateTransition translate1 = new TranslateTransition(Duration.millis(100),redorc);
-        translate1.setCycleCount(1);
-        translate1.setByX(60);
-        translate1.setAutoReverse(false);
-        translate1.play();
+        System.out.println("In bere");
+        orcjump = Animations.translateTransition(redorc, 300,0,-80, true, -1);
+        int temp;
+        if (g instanceof Weapon) {
+            temp = lastspacecount;
+        }
+        else
+        temp = ((Hero) g).getSpacecount();
+        if (lastspacecount != temp) {
+            System.out.println("In if");
+            lastspacecount = temp;
+            orcjump.stop();
+            if (g instanceof Weapon) health--;
+            else if (g instanceof Hero && ((Hero) g).getCurrentweapon() != null) health--;
+            orcjump.stop();
+            TranslateTransition translate1 = new TranslateTransition(Duration.millis(100), redorc);
+            translate1.setCycleCount(1);
+            translate1.setByX(60);
+            translate1.setAutoReverse(false);
+            translate1.play();
 
-        TranslateTransition translate = new TranslateTransition(Duration.millis(100),redorc);
-        translate.setCycleCount(1);
-        translate.setToY(3);
-        translate.setAutoReverse(false);
-        translate.play();
-        translate.setOnFinished(e1 ->{
-            if(health <= 0){
-                TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), redorc);
-                translate2.setCycleCount(1);
-                translate2.setToY(150);
-                translate2.setAutoReverse(false);
-                translate2.play();
-                translate2.setOnFinished(e->{
-                    redorc.setImage(null);
-                });
+            TranslateTransition translate = new TranslateTransition(Duration.millis(100), redorc);
+            translate.setCycleCount(1);
+            translate.setToY(3);
+            translate.setAutoReverse(false);
+            translate.play();
+            translate.setOnFinished(e1 -> {
+                if (health <= 0) {
+                    TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), redorc);
+                    translate2.setCycleCount(1);
+                    translate2.setToY(150);
+                    translate2.setAutoReverse(false);
+                    translate2.play();
+                    translate2.setOnFinished(e -> {
+                        redorc.setImage(null);
+                    });
 
-            }
-            else {
-                if (flagonplatform == false) {     // plat start >=
-                    int temp = ((Hero) g).getSpacecount();
-                    Double t = redorc.getX();
-                    int f = -1;
-                    for (int i = 0; i < platformstarts.size(); i++) {
-                        if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
-                            if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
-                                System.out.println("on platform  " + (i));
-                                orcjump.play();
-                                f = 0;
-                                break;
+                } else {
+                    if (flagonplatform == false) {
+                        Double t = redorc.getX();
+                        int f = -1;
+                        for (int i = 0; i < platformstarts.size(); i++) {
+                            if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
+                                if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
+                                    System.out.println("on platform  " + (i));
+                                    orcjump.play();
+                                    f = 0;
+                                    break;
+                                }
                             }
                         }
+                        if (f == -1) {
+                            TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), redorc);
+                            translate2.setCycleCount(1);
+                            translate2.setToY(300);
+                            translate2.setAutoReverse(false);
+                            translate2.play();
+                        }
+                    } else {
+                        orcjump.play();
                     }
-                    if (f == -1) {
-                        TranslateTransition translate2 = new TranslateTransition(Duration.millis(300), redorc);
-                        translate2.setCycleCount(1);
-                        translate2.setToY(300);
-                        translate2.setAutoReverse(false);
-                        translate2.play();
-                    }
-                } else {
-                    orcjump.play();
                 }
-            }
-        });
-
+            });
+        }
     }
 
 }

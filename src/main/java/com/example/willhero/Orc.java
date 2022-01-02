@@ -19,6 +19,7 @@ public abstract class Orc extends Gameobject{
     protected static ArrayList<Double> platformstarts = new ArrayList<Double>();
     protected static ArrayList<Double> platformsize = new ArrayList<Double>();
     protected boolean flagonplatform = true;
+    protected int lastspacecount = 0;
 
     Orc(double he){
         this.health = he;

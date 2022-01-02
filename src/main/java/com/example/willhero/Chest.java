@@ -4,14 +4,15 @@ import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Duration;
 
 import java.io.File;
 
 public class Chest extends Gameobject{
+    private static int count = 1;
     private ImageView chest;
     private TranslateTransition chestjump;
     private boolean opened =  false;
+    private int id;
 
     public Chest(){
         chest = new ImageView();
@@ -19,6 +20,8 @@ public class Chest extends Gameobject{
         chest.setFitHeight(55);
         chest.setFitWidth(70);
         chest.setY(383);
+        id = count;
+        count++;
     }
 
     public void display(AnchorPane mainpane){
@@ -35,7 +38,7 @@ public class Chest extends Gameobject{
         if(g instanceof Hero ){
                 chest.setImage(null);
                 chest.setImage(new Image((new File("src/main/resources/ChestOpen.png")).toURI().toString()));
-                if((int)(Math.random()*3) == 1){
+                if(((int)(Math.random()*3) == 1) || id == 1){
                     ((Hero)g).addweapon((int)(Math.random()*2));
 //                ((Hero)g).addweapon(0);
                 }
