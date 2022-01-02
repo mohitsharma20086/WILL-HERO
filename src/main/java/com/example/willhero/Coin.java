@@ -32,21 +32,22 @@ public class Coin extends Gameobject{
     @Override
     public void oncollide(Gameobject g){
         if(correct==true && coin.getImage() != null){
-            correct=false;
+            correct = false;
             if(g instanceof Hero){
                 coin.setImage(null);
                 ((Hero)g).addcoin(1);
                 ((Hero) g).update();
 
-            }}
-        if(g instanceof Weapon){
-            coin.setImage(null);
-            ((Weapon) g).getHero().addcoin(1);
-            ((Weapon) g).getHero().update();
-        }
-        else{
-            TranslateTransition movefor = Animations.translateTransition(coin, 100, 70, 0, false, 1);
-            movefor.play();
+            }
+            if(g instanceof Weapon){
+                coin.setImage(null);
+                ((Weapon) g).getHero().addcoin(1);
+                ((Weapon) g).getHero().update();
+            }
+            else{
+                TranslateTransition movefor = Animations.translateTransition(coin, 100, 70, 0, false, 1);
+                movefor.play();
+            }
         }
     }
 

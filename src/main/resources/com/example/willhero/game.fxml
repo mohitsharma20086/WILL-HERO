@@ -17,7 +17,7 @@
       <Insets />
    </opaqueInsets>
    <children>
-      <ImageView fitHeight="606.0" fitWidth="1019.0" layoutX="-3.0" layoutY="-1.0">
+      <ImageView fitHeight="606.0" fitWidth="1019.0" layoutX="-9.0" layoutY="-3.0">
          <image>
             <Image url="@../../../Backgr.png" />
          </image>
@@ -52,7 +52,7 @@
             <Image url="@../../../coin_logo.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="sword_logo" fitHeight="51.0" fitWidth="50.0" layoutX="172.0" layoutY="528.0">
+      <ImageView fx:id="sword_logo" fitHeight="51.0" fitWidth="50.0" layoutX="172.0" layoutY="528.0" onMouseClicked="#changetosword">
          <image>
             <Image url="@../../../swordinactive.jpg" />
          </image>
@@ -67,7 +67,7 @@
             <Image url="@../../../add_user.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="knives_logo" fitHeight="51.0" fitWidth="50.0" layoutX="103.0" layoutY="528.0">
+      <ImageView fx:id="knives_logo" fitHeight="51.0" fitWidth="50.0" layoutX="103.0" layoutY="528.0" onMouseClicked="#changetoknive">
          <image>
             <Image url="@../../../knivesincative.jpg" />
          </image>
@@ -250,7 +250,6 @@
          </children>
       </Group>
       <ImageView fx:id="pause_gamebutton" fitHeight="37.0" fitWidth="34.0" layoutX="35.0" layoutY="39.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
-      <Group layoutX="881.0" layoutY="232.0" />
       <Group fx:id="game_over_popup" layoutX="1016.0" layoutY="161.0">
          <children>
             <AnchorPane prefHeight="263.0" prefWidth="414.0">
@@ -284,6 +283,34 @@
             </AnchorPane>
          </children>
       </Group>
+      <Group fx:id="won_popup" layoutX="1032.0" layoutY="176.0">
+         <children>
+            <AnchorPane prefHeight="244.0" prefWidth="367.0">
+               <children>
+                  <ImageView fitHeight="247.0" fitWidth="367.0">
+                     <image>
+                        <Image url="@../../../backgpop.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="73.0" fitWidth="200.0" layoutY="156.0" onMouseClicked="#reload_game">
+                     <image>
+                        <Image url="@../../../continue-button.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="44.0" fitWidth="126.0" layoutX="210.0" layoutY="171.0" onMouseClicked="#exitgame">
+                     <image>
+                        <Image url="@../../../exit_button.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="55.0" layoutY="36.0" text="You Won!!" textFill="#faf7f7">
+                     <font>
+                        <Font name="Aparajita Bold" size="67.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </Group>
       <Group fx:id="pause_game_popup" layoutX="392.0" layoutY="-392.0">
          <children>
             <AnchorPane prefHeight="382.0" prefWidth="312.0">
@@ -303,7 +330,7 @@
                         <Font name="Aparajita Bold" size="29.0" />
                      </font>
                   </Label>
-                  <Label layoutX="97.0" layoutY="76.0" text="Main Menu" textFill="WHITE">
+                  <Label layoutX="97.0" layoutY="76.0" onMouseClicked="#reload_game" text="Main Menu" textFill="WHITE">
                      <font>
                         <Font name="Aparajita Bold" size="29.0" />
                      </font>
@@ -322,6 +349,5 @@
             </AnchorPane>
          </children>
       </Group>
-      <Group />
    </children>
 </AnchorPane>

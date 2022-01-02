@@ -1,7 +1,7 @@
-//store platform in an arraylist and then do with thw list
 package com.example.willhero;
 
 import javafx.animation.TranslateTransition;
+import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -35,6 +35,9 @@ public class Hero extends Gameobject {
     private int spacecount = 0;
     Label coincount=new Label();
     Label stepcountl = new Label();
+
+    private ImageView knives_logo;
+    private ImageView sword_logo;
 
 
     Hero(AnchorPane mainpane){
@@ -92,13 +95,22 @@ public class Hero extends Gameobject {
         return coin_collected;
     }
 
+    public void setimages(ImageView knives_logo, ImageView sword_logo){
+        this.knives_logo = knives_logo;
+        this.sword_logo =sword_logo;
+        knives_logo.toFront();
+        sword_logo.toFront();
+    }
+
     public void addweapon(int i){
         if(w[i] == null){
             if(i == 0) {
                 w[i] = new Sword(this);
+                sword_logo.setImage(new Image((new File("src/main/resources/swordactive.jpg")).toURI().toString()));
             }
             else {
                 w[i] = new Throwing_knives(this);
+                knives_logo.setImage(new Image((new File("src/main/resources/knivesactive.jpg")).toURI().toString()));
             }
             if(currentweapon != null)currentweapon.remove(rootmain);
             currentweapon = w[i];
@@ -110,6 +122,24 @@ public class Hero extends Gameobject {
         }
     }
 
+    public void changeweapon(int i){
+        if(w[i] != null){
+            if(currentweapon != null)currentweapon.remove(rootmain);
+            currentweapon = w[i];
+            if(currentweapon != null)currentweapon.display(rootmain);
+//
+//            TranslateTransition translate = new TranslateTransition(Duration.millis(300),hero);
+//            translate.setCycleCount(1);
+//            translate.setToY(3);
+//            translate.setAutoReverse(false);
+//            translate.setOnFinished(e ->{
+//                if(currentweapon != null)currentweapon.remove(rootmain);
+//                currentweapon = w[i];
+//                if(currentweapon != null)currentweapon.display(rootmain);
+//            });
+//            translate.play();
+        }
+    }
     public void setcurrentweapon(int i){
         currentweapon = w[i];
     }
@@ -163,8 +193,6 @@ public class Hero extends Gameobject {
                 Double t = hero.getX();
                 int f = -1;
                 for(int i = currentplatform; i < platformstarts.size();i++) {
-//                    System.out.println("start " +(platformstarts.get(i) - spacecount*(200))+ " " +t);
-//                    System.out.println("size " + (platformstarts.get(i) -spacecount*(200) + platformsize.get(i))+ " " +t);
                     if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
                         if (Double.compare((platformstarts.get(i) -spacecount*(200) + platformsize.get(i)), t) > 30) {
                             herojump.play();
@@ -272,5 +300,6 @@ public class Hero extends Gameobject {
         translate1.setAutoReverse(false);
         translate1.play();
         if(currentweapon != null)currentweapon.fallwithhero();
+        herojump.stop();
     }
 }

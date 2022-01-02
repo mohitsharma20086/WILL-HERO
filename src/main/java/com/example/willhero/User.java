@@ -26,7 +26,11 @@ public class User implements Serializable {
     }
 
     public String getName() {return this.name;}
-    public int getCurrentscore() {
-        return currentScore;
+    public int getCoincollected() {
+        return coincollected;
+    }
+
+    public int getHighScore() {
+        return highScore;
     }
 }
