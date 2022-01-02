@@ -3,8 +3,6 @@ package com.example.willhero;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-//patter problem - singleton
-
 public class HighScore implements Serializable {
     private static final long serialVersionUID = 3L;
     private ArrayList<String> usersname = new ArrayList<>();
@@ -54,10 +52,12 @@ public class HighScore implements Serializable {
         return highscore;
     }
 
-    public void print(){
-        for(int i = 0; i < 4; i++){
-            System.out.println(usersname.get(i)+"  "+highscore.get(i));
+    public String print(){
+        String s = "";
+        for(int i = 0; i < 5; i++){
+            s += (i+1)+")  "+usersname.get(i)+"  -  "+highscore.get(i)+"\n";
         }
+        return s;
     }
 
 }

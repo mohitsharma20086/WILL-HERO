@@ -1,7 +1,6 @@
 package com.example.willhero;
 
 import javafx.animation.TranslateTransition;
-import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -50,7 +49,6 @@ public class Hero extends Gameobject {
         hero.setX(320);
         mainpane.getChildren().add(hero);
 
-        //set coin label
         coincount.setLayoutX(900.0);
         coincount.setLayoutY(18.0);
         coincount.setPrefWidth(67.0);
@@ -127,7 +125,7 @@ public class Hero extends Gameobject {
             if(currentweapon != null)currentweapon.remove(rootmain);
             currentweapon = w[i];
             if(currentweapon != null)currentweapon.display(rootmain);
-//
+
 //            TranslateTransition translate = new TranslateTransition(Duration.millis(300),hero);
 //            translate.setCycleCount(1);
 //            translate.setToY(3);

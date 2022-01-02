@@ -3,8 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -158,17 +156,16 @@
                         <Image url="@../../../backgpop.png" />
                      </image>
                   </ImageView>
+                  <Label fx:id="highscoretable" layoutX="65.0" layoutY="64.0" prefHeight="162.0" prefWidth="264.0" text="Label" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita" size="16.0" />
+                     </font>
+                  </Label>
                   <Label layoutX="71.0" text="High Scores" textAlignment="CENTER" textFill="#fffbfb">
                      <font>
                         <Font name="Aparajita Bold" size="40.0" />
                      </font>
                   </Label>
-                  <TableView fx:id="highscoretable" layoutX="17.0" layoutY="54.0" prefHeight="170.0" prefWidth="290.0">
-                    <columns>
-                      <TableColumn prefWidth="138.39996337890625" text="User Name" />
-                      <TableColumn prefWidth="151.99996948242188" text="Score" />
-                    </columns>
-                  </TableView>
                   <ImageView fx:id="viewhighscore_exit" fitHeight="44.0" fitWidth="44.0" layoutX="298.0" layoutY="-20.0" onMouseClicked="#hide_viewhighscore_popup">
                      <image>
                         <Image url="@../../../quit_logo.png" />

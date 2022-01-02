@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -108,8 +107,6 @@ public class GameController implements Initializable, Serializable {
         }
     }
 
-
-
     public void Deserializeuser() throws IOException {
         ObjectInputStream in = null;
         try {
@@ -200,7 +197,6 @@ public class GameController implements Initializable, Serializable {
                 for(int i =0; i < namesList.size(); i++){
                     highscore.addhighscore(number.get(i), namesList.get(i));
                 }
-                highscore.print();
             }catch (EOFException e) {
 
             }catch (ClassCastException e) {
@@ -305,7 +301,7 @@ public class GameController implements Initializable, Serializable {
     @FXML
     private TextField nametext;
     @FXML
-    private TableView highscoretable;
+    private Label highscoretable;
 
     @FXML
     private ImageView knives_logo;
@@ -612,6 +608,8 @@ public class GameController implements Initializable, Serializable {
     @FXML
     void show_highscore_popup(MouseEvent event) {
         if(!onscreen){
+            String temp = highscore.print();
+            highscoretable.setText(temp);
             viewhighscore_popup.toFront();
             TranslateTransition translate = new TranslateTransition(Duration.millis(400), viewhighscore_popup);
             translate.setToX((rootmain.getPrefWidth()+((Node)viewhighscore_popup).getBoundsInLocal().getWidth())/2);
