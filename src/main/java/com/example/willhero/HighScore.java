@@ -1,32 +1,63 @@
 package com.example.willhero;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 //patter problem - singleton
 
-public class HighScore {
+public class HighScore implements Serializable {
+    private static final long serialVersionUID = 3L;
     private ArrayList<String> usersname = new ArrayList<>();
-    private ArrayList<String> hidghscore = new ArrayList<>();
-//
-//    private HighScore() {
-//    }
-//
-//    public static void addhighscore() {
-//        if (highScore == null) {
-//            highScore = new HighScore();
-//        }
-//        return comp;
-//        public void setCurrentScore(int currentscore) {
-//            this.currentScore = currentscore;
-//            highScore=Math.max(highScore,currentscore);
-//        }
-//    }
-//
-//    private LengthComparator() {
-//    }
-//
-//    public int compare(String s1, String s2) {
-//        return s1.length() - s2.length();
-//
-//    }
+    private ArrayList<Integer> highscore = new ArrayList<Integer>();
+
+    public HighScore(){
+        for(int i = usersname.size(); i < 5; i++){
+            usersname.add("");
+            highscore.add(0);
+        }
+    }
+    public void addhighscore(User u) {
+        for(int i = 0; i < 5; i++){
+            if(usersname.get(i).equals(u.getName())){
+                if(highscore.get(i) == u.getCurrentScore())return;
+            }
+        }
+        for(int i = 0; i < 5; i++){
+            if(highscore.get(i) < u.getCurrentScore()){
+                highscore.set(i, u.getCurrentScore());
+                usersname.set(i, u.getName());
+                break;
+            }
+        }
+    }
+
+    public void addhighscore(int h, String name) {
+        for(int i = 0; i < 5; i++){
+            if(usersname.get(i).equals(name)){
+                if(highscore.get(i) == h)return;
+            }
+        }
+        for(int i = 0; i < 5; i++){
+            if(highscore.get(i) < h){
+                highscore.set(i, h);
+                usersname.set(i, name);
+                break;
+            }
+        }
+    }
+
+    public ArrayList getnames(){
+        return usersname;
+    }
+
+    public ArrayList gethighscore(){
+        return highscore;
+    }
+
+    public void print(){
+        for(int i = 0; i < 4; i++){
+            System.out.println(usersname.get(i)+"  "+highscore.get(i));
+        }
+    }
+
 }

@@ -35,5 +35,9 @@ public class User implements Serializable {
         return highScore;
     }
 
+    public int getCurrentScore() {
+        return currentScore;
+    }
+
 
 }
