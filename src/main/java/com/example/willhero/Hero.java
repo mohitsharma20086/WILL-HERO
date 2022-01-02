@@ -88,6 +88,10 @@ public class Hero extends Gameobject {
         coincount.setText(Integer.toString(coin_collected));
     }
 
+    public int getCoin_collected(){
+        return coin_collected;
+    }
+
     public void addweapon(int i){
         if(w[i] == null){
             if(i == 0) {

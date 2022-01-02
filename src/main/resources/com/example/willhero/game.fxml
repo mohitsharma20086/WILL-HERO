@@ -47,9 +47,14 @@
             <Image url="@../../../Exit_logo.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="coin_logo" fitHeight="23.0" fitWidth="26.0" layoutX="950.0" layoutY="32.0">
+      <ImageView fx:id="coin_logo" fitHeight="23.0" fitWidth="26.0" layoutX="933.0" layoutY="32.0">
          <image>
             <Image url="@../../../coin_logo.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="sword_logo" fitHeight="51.0" fitWidth="50.0" layoutX="172.0" layoutY="528.0">
+         <image>
+            <Image url="@../../../swordinactive.jpg" />
          </image>
       </ImageView>
       <ImageView fx:id="tap_icon" fitHeight="23.0" fitWidth="44.0" layoutX="478.0" layoutY="274.0">
@@ -60,6 +65,11 @@
       <ImageView fx:id="addnew_user" fitHeight="65.0" fitWidth="79.0" layoutX="4.0" layoutY="346.0" onMouseClicked="#show_addnewuser_popup">
          <image>
             <Image url="@../../../add_user.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="knives_logo" fitHeight="51.0" fitWidth="50.0" layoutX="103.0" layoutY="528.0">
+         <image>
+            <Image url="@../../../knivesincative.jpg" />
          </image>
       </ImageView>
       <ImageView fx:id="will_hero_name" fitHeight="153.0" fitWidth="200.0" layoutX="413.0" layoutY="87.0">
@@ -76,7 +86,7 @@
                         <Image url="@../../../backgpop.png" />
                      </image>
                   </ImageView>
-                  <TextField layoutX="195.0" layoutY="182.0" />
+                  <TextField fx:id="nametext" layoutX="195.0" layoutY="182.0" />
                   <ImageView fitHeight="44.0" fitWidth="126.0" layoutX="237.0" layoutY="235.0" onMouseClicked="#hide_adduser_popup">
                      <image>
                         <Image url="@../../../cancel.png" />
@@ -92,7 +102,7 @@
                         <Font name="Times New Roman Bold" size="44.0" />
                      </font>
                   </Label>
-                  <Label layoutX="48.0" layoutY="180.0" text="ENTER NAME" textAlignment="CENTER" textFill="WHITE">
+                  <Label fx:id="enternamelabel" layoutX="48.0" layoutY="180.0" text="ENTER NAME" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font name="Aparajita Bold" size="20.0" />
                      </font>
@@ -115,17 +125,12 @@
                         <Image url="@../../../backgpop.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="126.0" layoutY="73.0" text="Save Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font name="Aparajita Bold" size="31.0" />
-                     </font>
-                  </Label>
                   <ImageView fitHeight="65.0" fitWidth="158.0" layoutY="181.0" onMouseClicked="#save_load_memory">
                      <image>
                         <Image url="@../../../continue-button.png" />
                      </image>
                   </ImageView>
-                  <Label layoutX="123.0" layoutY="124.0" text="Load Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                  <Label layoutX="123.0" layoutY="33.0" prefHeight="39.0" prefWidth="126.0" text="Load Game" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
                         <Font name="Aparajita Bold" size="31.0" />
                      </font>
@@ -158,7 +163,7 @@
                         <Font name="Aparajita Bold" size="40.0" />
                      </font>
                   </Label>
-                  <TableView layoutX="17.0" layoutY="54.0" prefHeight="170.0" prefWidth="290.0">
+                  <TableView fx:id="highscoretable" layoutX="17.0" layoutY="54.0" prefHeight="170.0" prefWidth="290.0">
                     <columns>
                       <TableColumn prefWidth="138.39996337890625" text="User Name" />
                       <TableColumn prefWidth="151.99996948242188" text="Score" />
@@ -244,7 +249,7 @@
             </AnchorPane>
          </children>
       </Group>
-      <ImageView fx:id="pause_gamebutton" fitHeight="51.0" fitWidth="50.0" layoutX="18.0" layoutY="62.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="pause_gamebutton" fitHeight="37.0" fitWidth="34.0" layoutX="35.0" layoutY="39.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
       <Group layoutX="881.0" layoutY="232.0" />
       <Group fx:id="game_over_popup" layoutX="1016.0" layoutY="161.0">
          <children>
@@ -317,5 +322,6 @@
             </AnchorPane>
          </children>
       </Group>
+      <Group />
    </children>
 </AnchorPane>

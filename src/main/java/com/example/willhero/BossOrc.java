@@ -54,9 +54,20 @@ public class BossOrc extends Orc{
 
     @Override
     public void oncollide(Gameobject g) {
+        if (g instanceof Hero){
+            if(bossorc.getY() > ((Hero) g).getImage().getY()){
+                ((Hero) g).fall();
+                return;
+            }
+        }
         if(bossorc.getImage() == null)return;
         orcjump = Animations.translateTransition(bossorc, 300, 0, -90, true, -1);
-        int temp = ((Hero) g).getSpacecount();
+        int temp = 0;
+        if (g instanceof Weapon) {
+            temp = lastspacecount;
+        }
+        else
+            temp = ((Hero) g).getSpacecount();
         if (lastspacecount != temp) {
             lastspacecount = temp;
             orcjump.stop();
@@ -95,18 +106,14 @@ public class BossOrc extends Orc{
                     });
 
                 } else {
-                    if (flagonplatform == false) {     // plat start >=
-
+                    flagonplatform = false;
+                    if (flagonplatform == false) {
                         Double t = bossorc.getX();
                         int f = -1;
-                        for (int i = 0; i < platformstarts.size(); i++) {
-                            if (Double.compare(platformstarts.get(i) - temp * (200), t) < 0 && Double.compare(platformstarts.get(i + 1) - temp * (200), t) > 0) {
-                                if (Double.compare((platformstarts.get(i) - temp * (200) + platformsize.get(i)), t) > 30) {
-                                    System.out.println("on platform  " + (i));
-                                    orcjump.play();
-                                    f = 0;
-                                    break;
-                                }
+                        for (int i = 0; i < platforms.size(); i++) {
+                            if(bossorc.getBoundsInParent().intersects(platforms.get(i).getBoundsInParent())){
+                                f = 0;
+                                orcjump.play();
                             }
                         }
                         if (f == -1) {
@@ -116,6 +123,7 @@ public class BossOrc extends Orc{
                             translate2.setAutoReverse(false);
                             translate2.play();
                         }
+
                     } else {
                         orcjump.play();
                     }

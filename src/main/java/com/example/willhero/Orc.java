@@ -18,12 +18,17 @@ public abstract class Orc extends Gameobject{
 
     protected static ArrayList<Double> platformstarts = new ArrayList<Double>();
     protected static ArrayList<Double> platformsize = new ArrayList<Double>();
+    protected static ArrayList<ImageView> platforms = new ArrayList<ImageView>();
     protected boolean flagonplatform = true;
     protected int lastspacecount = 0;
     protected boolean flaghit = false;
 
     Orc(double he){
         this.health = he;
+    }
+
+    public static void addplaform(ImageView i){
+        platforms.add(i);
     }
 
     public static void addplatformd(double i, double j){
@@ -39,6 +44,10 @@ public abstract class Orc extends Gameobject{
     public abstract void setX(double x);
 
     public abstract ImageView getImage();
+
+    public double gethealth(){
+        return health;
+    }
 
 
 }
