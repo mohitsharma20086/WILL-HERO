@@ -47,7 +47,7 @@
             <Image url="@../../../Exit_logo.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="23.0" fitWidth="26.0" layoutX="962.0" layoutY="20.0">
+      <ImageView fx:id="coin_logo" fitHeight="23.0" fitWidth="26.0" layoutX="950.0" layoutY="32.0">
          <image>
             <Image url="@../../../coin_logo.png" />
          </image>
@@ -245,29 +245,6 @@
          </children>
       </Group>
       <ImageView fx:id="pause_gamebutton" fitHeight="51.0" fitWidth="50.0" layoutX="18.0" layoutY="62.0" onMouseClicked="#pause_gamepopup" pickOnBounds="true" preserveRatio="true" />
-      <Group fx:id="pause_game_popup" layoutX="337.0" layoutY="-393.0">
-         <children>
-            <AnchorPane prefHeight="382.0" prefWidth="312.0">
-               <children>
-                  <ImageView fx:id="hide_pause_game_popup" fitHeight="43.0" fitWidth="44.0" layoutX="283.0" layoutY="-20.0" onMouseClicked="#hide_pause_gamepopup">
-                     <image>
-                        <Image url="@../../../quit_logo.png" />
-                     </image>
-                  </ImageView>
-                  <Label layoutX="97.0" layoutY="76.0" text="Main Menu" textFill="WHITE">
-                     <font>
-                        <Font name="Aparajita Bold" size="29.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="100.0" layoutY="127.0" onMouseClicked="#pause_exit_popup" text="Quit Game" textFill="WHITE">
-                     <font>
-                        <Font name="Aparajita Bold" size="29.0" />
-                     </font>
-                  </Label>
-               </children>
-            </AnchorPane>
-         </children>
-      </Group>
       <Group layoutX="881.0" layoutY="232.0" />
       <Group fx:id="game_over_popup" layoutX="1016.0" layoutY="161.0">
          <children>
@@ -283,21 +260,59 @@
                         <Font name="Aparajita Bold" size="50.0" />
                      </font>
                   </Label>
-                  <Label layoutX="125.0" layoutY="122.0" text="Want to Revive !!!" textFill="WHITE">
+                  <Label fx:id="revielabel" layoutX="125.0" layoutY="122.0" text="Want to Revive !!!" textFill="WHITE">
                      <font>
                         <Font name="Arial Narrow Bold" size="23.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="73.0" fitWidth="200.0" layoutX="4.0" layoutY="180.0" onMouseClicked="#restart_game">
+                  <ImageView fitHeight="73.0" fitWidth="200.0" layoutX="4.0" layoutY="180.0" onMouseClicked="#resume_game">
                      <image>
                         <Image url="@../../../continue-button.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="58.0" fitWidth="194.0" layoutX="205.0" layoutY="188.0">
+                  <ImageView fitHeight="58.0" fitWidth="194.0" layoutX="205.0" layoutY="188.0" onMouseClicked="#reload_game">
                      <image>
                         <Image url="@../../../cancel.png" />
                      </image>
                   </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </Group>
+      <Group fx:id="pause_game_popup" layoutX="392.0" layoutY="-392.0">
+         <children>
+            <AnchorPane prefHeight="382.0" prefWidth="312.0">
+               <children>
+                  <ImageView fitHeight="389.0" fitWidth="327.0">
+                     <image>
+                        <Image url="@../../../backgpop.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="hide_pause_game_popup" fitHeight="43.0" fitWidth="44.0" layoutX="283.0" layoutY="-20.0" onMouseClicked="#hide_pause_gamepopup">
+                     <image>
+                        <Image url="@../../../quit_logo.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="82.0" layoutY="173.0" onMouseClicked="#reload_game" prefHeight="42.0" prefWidth="150.0" text="Restart Game" textAlignment="CENTER" textFill="#fffbfb">
+                     <font>
+                        <Font name="Aparajita Bold" size="29.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="97.0" layoutY="76.0" text="Main Menu" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita Bold" size="29.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="100.0" layoutY="127.0" onMouseClicked="#pause_exit_popup" text="Quit Game" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita Bold" size="29.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="97.0" layoutY="215.0" onMouseClicked="#save_game" text="Save Game" textFill="WHITE">
+                     <font>
+                        <Font name="Aparajita Bold" size="28.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

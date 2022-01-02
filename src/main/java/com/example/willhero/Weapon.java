@@ -81,6 +81,14 @@ public abstract class Weapon extends Gameobject {
         translate1.play();
     }
 
+    public void resurrect(){
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(2),weapon);
+        translate1.setCycleCount(1);
+        translate1.setToY(0);
+        translate1.setAutoReverse(false);
+        translate1.play();
+    }
+
     public abstract void move(AnchorPane pane);
     public abstract void movewithhero();
     public abstract void stopmovewithhero();

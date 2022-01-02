@@ -6,9 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
-
+import javafx.scene.control.Label;
 import java.io.File;
 import java.util.ArrayList;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Hero extends Gameobject {
@@ -29,6 +33,8 @@ public class Hero extends Gameobject {
     private boolean flagexit = false;
     private boolean another_space1 = false;
     private int spacecount = 0;
+    Label coincount=new Label();
+    Label stepcountl = new Label();
 
 
     Hero(AnchorPane mainpane){
@@ -41,14 +47,45 @@ public class Hero extends Gameobject {
         hero.setX(320);
         mainpane.getChildren().add(hero);
 
+        //set coin label
+        coincount.setLayoutX(900.0);
+        coincount.setLayoutY(18.0);
+        coincount.setPrefWidth(67.0);
+        coincount.setPrefHeight(46.0);
+        coincount.minWidth(Region.USE_COMPUTED_SIZE);
+        coincount.minHeight(Region.USE_COMPUTED_SIZE);
+        coincount.maxHeight(Region.USE_COMPUTED_SIZE);
+        coincount.maxWidth(Region.USE_COMPUTED_SIZE);
+        Font font = Font.font("Verdana", FontWeight.EXTRA_BOLD, 25);
+        coincount.setFont(font);
+        coincount.setTextFill(Paint.valueOf("#fcfcfc"));
+        rootmain.getChildren().add(coincount);
+
+        //set stepcount label
+        stepcountl.setLayoutX(400);
+        stepcountl.setLayoutY(18.0);
+        stepcountl.setPrefWidth(170);
+        stepcountl.setPrefHeight(46.0);
+        stepcountl.minWidth(Region.USE_COMPUTED_SIZE);
+        stepcountl.minHeight(Region.USE_COMPUTED_SIZE);
+        stepcountl.maxHeight(Region.USE_COMPUTED_SIZE);
+        stepcountl.maxWidth(Region.USE_COMPUTED_SIZE);
+        Font font1 = Font.font("Verdana", FontWeight.EXTRA_BOLD, 25);
+        stepcountl.setFont(font1);
+        stepcountl.setTextFill(Paint.valueOf("#fcfcfc"));
+        rootmain.getChildren().add(stepcountl);
+        coincount.setText(Integer.toString(coin_collected));
+
     }
 
+    @Override
     public void display(AnchorPane mainpane){
         mainpane.getChildren().add(hero);
     }
 
     public void addcoin(int x){
         coin_collected += x;
+        coincount.setText(Integer.toString(coin_collected));
     }
 
     public void addweapon(int i){
@@ -72,13 +109,17 @@ public class Hero extends Gameobject {
     public void setcurrentweapon(int i){
         currentweapon = w[i];
     }
-
+    public void update(){
+        coincount.setText(Integer.toString(coin_collected));
+        coincount.toFront();
+    }
     public void addplatformd(double i, double j){
         platformstarts.add(i);
         platformsize.add(j);
         Orc.addplatformd(i,j);
     }
 
+    @Override
     public void jump(){
         herojump = Animations.translateTransition(hero, 300,0,-70, true, -1);
         herojump.play();
@@ -122,7 +163,6 @@ public class Hero extends Gameobject {
 //                    System.out.println("size " + (platformstarts.get(i) -spacecount*(200) + platformsize.get(i))+ " " +t);
                     if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
                         if (Double.compare((platformstarts.get(i) -spacecount*(200) + platformsize.get(i)), t) > 30) {
-                            System.out.println("on platform  "+(i));
                             herojump.play();
                             if(currentweapon != null)currentweapon.movewithhero();
                             f = 0;
@@ -148,7 +188,7 @@ public class Hero extends Gameobject {
         });
     }
 
-
+    @Override
     public ImageView getImage(){
         return hero;
     }
@@ -166,6 +206,10 @@ public class Hero extends Gameobject {
         another_space1 = true;
         this.another_space.set(true);
         spacecount++;
+        coincount.setText(Integer.toString(coin_collected));
+        stepcountl.setText("Score :  " +Integer.toString(spacecount));
+        coincount.toFront();
+        stepcountl.toFront();
     }
 
     public void moveback(){
@@ -189,5 +233,40 @@ public class Hero extends Gameobject {
 
     public int getSpacecount() {
         return spacecount;
+    }
+
+
+    public int resurrection(){
+        if(coin_collected >= 20){
+            Double t = hero.getX();
+            for(int i = currentplatform; i < platformstarts.size();i++) {
+                if (Double.compare(platformstarts.get(i) - spacecount*(200), t) < 0 && Double.compare(platformstarts.get(i+1) - spacecount*(200), t) > 0) {
+                    return i+1;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void setXY(){
+        flagexit = false;
+        flagonplatform = true;
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(2),hero);
+        translate1.setCycleCount(1);
+        translate1.setToY(0);
+        translate1.setAutoReverse(false);
+        translate1.play();
+        if(currentweapon != null)currentweapon.resurrect();
+//        TranslateTransition new = TranslateTransition()
+    }
+
+    public void fall(){
+        flagexit = true;
+        TranslateTransition translate1 = new TranslateTransition(Duration.millis(300),hero);
+        translate1.setCycleCount(1);
+        translate1.setToY(300);
+        translate1.setAutoReverse(false);
+        translate1.play();
+        if(currentweapon != null)currentweapon.fallwithhero();
     }
 }

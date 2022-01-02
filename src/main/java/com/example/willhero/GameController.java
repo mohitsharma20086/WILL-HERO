@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -17,18 +18,39 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameController implements Initializable {
+public class GameController implements Initializable, Serializable {
+
+    public void Serialize() throws IOException {
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(new FileOutputStream("out.txt"));
+            out.writeObject(gameobjects);
+            for (Gameobject gameObject : gameobjects) {
+                out.writeObject(gameObject);
+            }
+            //a b c
+            //a b c
+
+            //gameobject
+            //hero - alag file
+            // platform
+            // user
+        }finally {
+            assert out != null;
+            out.close();
+        }
+    }
 
     static GameController g = new GameController();
 
     private Hero hero;
+    private int coins_collected;        //coins
 
     @FXML
     private Parent root;
@@ -62,7 +84,8 @@ public class GameController implements Initializable {
     private ImageView view_highscore;
     @FXML
     private ImageView quit_game;
-
+    @FXML
+    private ImageView coin_logo;
 
     @FXML
     private Group add_new_user_popup;
@@ -99,6 +122,10 @@ public class GameController implements Initializable {
     @FXML
     private Group game_over_popup;
 
+    @FXML
+    private Label revielabel;
+
+
 
     private boolean falg_col = false;
 
@@ -112,7 +139,9 @@ public class GameController implements Initializable {
     private ArrayList<TranslateTransition> moveplatformsback = new ArrayList<TranslateTransition>();
     private ArrayList<TranslateTransition> moveorcsback = new ArrayList<TranslateTransition>();
 
+    public void loadhighscosre(){
 
+    }
 
     public void displaygame(Stage greeting_stage) throws IOException, InterruptedException {
         root = FXMLLoader.load(getClass().getResource("game.fxml"));
@@ -142,22 +171,59 @@ public class GameController implements Initializable {
 
         clouds.get(6).moveetoe(rootmain);
         clouds.get(5).moveetoe(rootmain);
+        if(!onscreen) {
+            pause_gamebutton.toFront();
+            coin_logo.toFront();
+            setting_logo.toFront();
+        }
         AtomicInteger count = new AtomicInteger(7);
         Timeline t = new Timeline(new KeyFrame(Duration.seconds(5),e->{
-            pause_gamebutton.toFront();
+
             clouds.get(count.get()).moveetoe(rootmain);
             count.getAndIncrement();
             if(count.get() > 12)count.set(0);
-            pause_gamebutton.toFront();
-            tap_icon.toFront();
-            will_hero_name.toFront();
-            Cursor_icon.toFront();
-            setting_logo.toFront();
+            if(!onscreen) {
+                pause_gamebutton.toFront();
+                tap_icon.toFront();
+                will_hero_name.toFront();
+                Cursor_icon.toFront();
+                setting_logo.toFront();
+                pause_gamebutton.toFront();
+                coin_logo.toFront();
+            }
         }));
         t.setCycleCount(Animation.INDEFINITE);
         t.play();
     }
-
+    public void generateCoin(){
+        int temp = gameobjects.size();
+        int ran= (int) (Math.random()*10 + 2);
+        int h=300;
+        int ran2= (int) (Math.random()*8 + 2);
+        for (int i = 0; i < ran; i++) {
+            if(i==0){
+//                System.out.println("pass");
+            }
+            else{
+                for (int j = 0; j < ran2; j++) {
+                    Coin c=new Coin();
+//                    System.out.println("coin generated");
+                    c.setX(platform.get(i).getImage().getX() + 50+h);
+                    gameobjects.add(c);
+                    h=h+40;
+                }
+            }
+        }
+        for (int j = temp; j < gameobjects.size(); j++){
+            (gameobjects.get(j)).display(rootmain);
+        }
+    }
+    public void removeCoin(){
+        for(int i = gameobjects.size() -1; i >= 0; i--){
+            gameobjects.get(i).remove(rootmain);
+            gameobjects.remove(i);
+        }
+    }
 
     public void removeplatforms(){
         Platform.setplatform_id(0);Platform.setplatform_id(0);
@@ -175,8 +241,8 @@ public class GameController implements Initializable {
         platform.add(p1);
         platform.get(0).setPlatformx(c+r);
         hero.addplatformd(c+r,p1.getplatformw(0));
-        c += platform.get(0).getPlatform().getFitWidth()+ 40;
-
+        c += platform.get(0).getImage().getFitWidth()+ 40;
+//        c += 200;
         r = ((int)(Math.random()*60+40)/10)*10;
         platform.get(0).display(rootmain);
         int i = 1;
@@ -185,8 +251,9 @@ public class GameController implements Initializable {
             platform.add(p);
             platform.get(i).setPlatformx(c+r);
             hero.addplatformd(c+r,p.getplatformw(i));
-            c += platform.get(i).getPlatform().getFitWidth()+ 60;
+            c += platform.get(i).getImage().getFitWidth()+ 60;
             r = ((int)(Math.random()*60+40)/10)*10;
+//            r = 200;
             platform.get(i).display(rootmain);
             i++;
         }
@@ -204,44 +271,53 @@ public class GameController implements Initializable {
         }
     }
     public void generategameobj(){
-//        RedOrc or = new RedOrc();
-//        gameobjects.add(or);
-//        gameobjects.get(0).display(rootmain);
+        gameobjects.get(0).display(rootmain);
         for(int i = 1; i< platform.size() -1 ; i++){
 //            if(platform.get(i).getPlatform().getFitWidth() >= 300){
-                if ((int)(Math.random() * 8) == 2 && platform.get(i).getPlatform().getFitWidth() >= 380) {
+                if ((int)(Math.random() * 8) == 2 && platform.get(i).getImage().getFitWidth() >= 380) {
                     Chest c = new Chest();
-                    c.setX(platform.get(i).getPlatform().getX() + 60);
+                    c.setX(platform.get(i).getImage().getX() + 60);
                     gameobjects.add(c);
                 }
                 else{
                     if(i ==2){
                         Chest c = new Chest();
-                        c.setX(Math.random()*(platform.get(i).getPlatform().getX()-120));
+                        c.setX(Math.random()*(platform.get(i).getImage().getX()-120));
                         gameobjects.add(c);
                     }
-                    if((int)Math.random() == 0) {
-                        NormalOrc o = new NormalOrc();
-                        o.setX(platform.get(i).getPlatform().getX() + 50);
+                    int t = (int)(Math.random()*7);
+                    if(t == 1) {
+                        RedOrc o = new RedOrc();
+                        o.setX(platform.get(i).getImage().getX() + 50);
                         gameobjects.add(o);
                     }
-                    for(int j = 1; j < Math.random()*platform.get(i).getPlatform().getFitWidth()/400; j++) {
+                    else if(t == 2){
+                        Tnt o = new Tnt();
+                        o.setX(platform.get(i).getImage().getX() + 50);
+                        gameobjects.add(o);
+                    }
+                    else{
+                        NormalOrc o = new NormalOrc();
+                        o.setX(platform.get(i).getImage().getX() + 50);
+                        gameobjects.add(o);
+                    }
+                    for(int j = 1; j < Math.random()*platform.get(i).getImage().getFitWidth()/400; j++) {
                         if ((int)(Math.random() * 10) == 2) {
                             Chest c = new Chest();
 //                            System.out.println("In here");
-                            c.setX(platform.get(i).getPlatform().getX() + 200 *j);
+                            c.setX(platform.get(i).getImage().getX() + 200 *j);
                             gameobjects.add(c);
                         }
                         else if(Math.floor((Math.random()*3) + 1) != 1){
                             NormalOrc o1 = new NormalOrc();
-                            o1.setX(platform.get(i).getPlatform().getX() + 300*j);
+                            o1.setX(platform.get(i).getImage().getX() + 300*j);
                             gameobjects.add(o1);
                         }
                     }
                 }
         }
         BossOrc o1 = new BossOrc();
-        o1.setX(platform.get(platform.size()-1).getPlatform().getX() + 200);
+        o1.setX(platform.get(platform.size()-1).getImage().getX() + 200);
         gameobjects.add(o1);
         for(int i = 1; i< gameobjects.size(); i++){
             gameobjects.get(i).display(rootmain);
@@ -257,12 +333,13 @@ public class GameController implements Initializable {
         moveclouds();
         generateplatforms();
         generategameobj();
+        generateCoin();
         Animations.translateTransition(will_hero_name, 1000,0,-3, true, -1).play();
         Animations.translateTransition(Cursor_icon, 300,0,-2, true, -1).play();
         exitgame.start();
 
         for(int i = 0; i< platform.size(); i++){
-            moveplatforms.add(Animations.translateTransition(platform.get(i).getPlatform(), 100, -200, 0, false, 1));
+            moveplatforms.add(Animations.translateTransition(platform.get(i).getImage(), 100, -200, 0, false, 1));
         }
         for(int i = 0; i< gameobjects.size(); i++){
             moveorcs.add(Animations.translateTransition(gameobjects.get(i).getImage(), 100, -200, 0, false, 1));
@@ -442,7 +519,7 @@ public class GameController implements Initializable {
         public void handle(long l) {
             boolean flagcool = false;
             for(int i = 0; i< platform.size(); i++){
-                if(hero.getImage().getBoundsInParent().intersects(platform.get(i).getPlatform().getBoundsInParent()) == true ){
+                if(hero.getImage().getBoundsInParent().intersects(platform.get(i).getImage().getBoundsInParent()) == true ){
                     hero.setonplatform(true);
                     falg_col = true;
                     return;
@@ -514,9 +591,8 @@ public class GameController implements Initializable {
         }
     };
 
-
     @FXML
-    void restart_game(MouseEvent event) throws Exception {
+    void reload_game(MouseEvent event) throws IOException, InterruptedException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         removeplatforms();
         generateplatforms();
@@ -528,7 +604,58 @@ public class GameController implements Initializable {
 
 
     @FXML
+    void resume_game(MouseEvent event) throws Exception {
+        int temp = hero.resurrection();
+        if(temp == -1){
+            revielabel.setText("Not Enough Coin \nclick on Cancel!!");
+        }
+        else{
+//            System.out.println("in here "+ temp);
+
+            TranslateTransition translate = new TranslateTransition(Duration.millis(400), game_over_popup);
+            translate.setToX((rootmain.getPrefWidth() - ((Node) game_over_popup).getBoundsInLocal().getWidth()) / 2);
+            translate.play();
+            hero.setXY();
+            onscreen = false;
+            exitgame.start();
+            hero.addcoin(-20);
+            double temp1 = 0;
+            for(int i = 1; i < platform.size(); i++){
+//                System.out.println(platform.get(i-1).getImage().getX()+" "+hero.getImage().getX());
+                if((platform.get(i).getImage().getX()- hero.getSpacecount()*(200)) >= hero.getImage().getX()){
+                    temp = i-1;
+                    temp1 = -(platform.get(i-1).getImage().getX()- hero.getSpacecount()*(200)) + hero.getImage().getX();
+                    break;
+                }
+            }
+//            System.out.println(temp+"  "+temp1);
+
+            for(int i = 0; i< platform.size(); i++){
+                Animations.translateTransition(platform.get(i).getImage(), 10, temp1, 0, false, 1).play();
+            }
+            for(int i = 0; i< gameobjects.size(); i++){
+                Animations.translateTransition(gameobjects.get(i).getImage(), 10, temp1, 0, false, 1).play();
+            }
+//            for (int i = 0; i < moveplatformsback.size(); i++) {
+//                moveplatformsres.get(i).play();
+//            }
+//            for (int i = 0; i < moveorcsback.size(); i++) {
+//                moveorcsres.get(i).play();
+//            }
+        }
+
+    }
+
+
+    @FXML
+    void save_game(MouseEvent event) {
+
+    }
+
+
+    @FXML
     void startgame(KeyEvent event) throws InterruptedException {
+
         if(!onscreen){
             if(event.getCode() == KeyCode.SPACE && onhomescreen){
                 //Move All the Icons out of the screen
@@ -560,12 +687,6 @@ public class GameController implements Initializable {
            collorc.stop();
            collorcwithweapon.stop();
            hero.setAnother_space();
-           Thread thread1 = new Thread() {
-               @Override
-               public void run() {
-                   hero.moveforward();
-               }
-           };
 
            Thread thread2 = new Thread(){
                @Override
@@ -593,11 +714,20 @@ public class GameController implements Initializable {
                    }
                }
            };
-
-           thread1.start();
-           thread3.start();
-           thread2.start();
-           thread4.start();
+//
+//           thread3.start();
+//           thread2.start();
+//           thread4.start();
+           hero.moveforward();
+           collplatform.start();
+           collorc.start();
+           collorcwithweapon.start();
+           for(int i = 0; i< moveplatforms.size(); i++){
+               moveplatforms.get(i).play();
+           }
+           for(int i = 0; i< moveorcs.size(); i++){
+               moveorcs.get(i).play();
+           }
 //           System.out.println((int)(Math.random()*2));
 //           try {
 //               Thread.sleep(300);
